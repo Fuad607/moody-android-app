@@ -78,7 +78,7 @@ public class RegisterActivity extends AppCompatActivity {
         final String username= this.username.getText().toString().trim();
         final String email= this.email.getText().toString().trim();
         final String password= this.password.getText().toString().trim();
-        DB = new DBHelper(this);
+        DB = new DBHelper(RegisterActivity.this);
 
         StringRequest stringRequest= new StringRequest(Request.Method.POST, URL_REGIST,
                 new Response.Listener<String>() {
@@ -90,8 +90,8 @@ public class RegisterActivity extends AppCompatActivity {
                             if(success.equals("success")){
                                 Toast.makeText(RegisterActivity.this,"Register Success",Toast.LENGTH_SHORT).show();
 
-
-                                startActivity(new Intent(RegisterActivity.this,MainActivity.class));
+                                DB.insertUserData( username,email,password);
+                                startActivity(new Intent(RegisterActivity.this,MenuActivity.class));
                             }
                             else if(success.equals("email_exits")){
                                 Toast.makeText(RegisterActivity.this,"Email already used",Toast.LENGTH_SHORT).show();

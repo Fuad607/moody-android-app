@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/collective-mood-tracker.iml" filepath="$PROJECT_DIR$/.idea/collective-mood-tracker.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Moody.iml" filepath="$PROJECT_DIR$/.idea/modules/Moody.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Moody.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Moody.app.iml" />
     </modules>
   </component>
 </project>

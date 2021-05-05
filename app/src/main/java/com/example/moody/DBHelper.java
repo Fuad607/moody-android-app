@@ -15,7 +15,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase DB) {
-        DB.execSQL("create Table Userdetails(user_id TEXT primary key, name TEXT, contact TEXT,dob TEXT   )");
+        DB.execSQL("create Table Userdetails(user_id INTEGER primary key autoincrement, name TEXT, contact TEXT,dob TEXT   )");
     }
 
     @Override
@@ -24,10 +24,10 @@ public class DBHelper extends SQLiteOpenHelper {
 
     }
 
-    public Boolean insertUserData(String userId, String name, String contact, String dob) {
+    public Boolean insertUserData(  String name, String contact, String dob) {
         SQLiteDatabase DB = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put("user_id", userId);
+
         contentValues.put("name", name);
         contentValues.put("contact", contact);
         contentValues.put("dob", dob);
