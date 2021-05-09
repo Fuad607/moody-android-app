@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 public class RegisterActivity extends AppCompatActivity {
-    private EditText username, email, password,c_password;
+    private EditText nickname, email, password,c_password;
     private Button btn_regist;
     private ProgressBar loading;
     private static String URL_REGIST="http://192.168.0.231/api/users";
@@ -38,7 +38,7 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register);
 
         loading= findViewById(R.id.loading);
-        username=findViewById(R.id.username);
+        nickname=findViewById(R.id.username);
         email=findViewById(R.id.email);
         password=findViewById(R.id.password);
         c_password=findViewById(R.id.c_password);
@@ -75,10 +75,13 @@ public class RegisterActivity extends AppCompatActivity {
         loading.setVisibility(View.VISIBLE);
         btn_regist.setVisibility(View.GONE);
 
-        final String username= this.username.getText().toString().trim();
+        final String nickname= this.nickname.getText().toString().trim();
         final String email= this.email.getText().toString().trim();
         final String password= this.password.getText().toString().trim();
         DB = new DBHelper(RegisterActivity.this);
+        System.out.println(nickname);
+        System.out.println(this.nickname.getText().toString().trim());
+        Log.d("ddd","ddd");
 
         StringRequest stringRequest= new StringRequest(Request.Method.POST, URL_REGIST,
                 new Response.Listener<String>() {
@@ -86,11 +89,15 @@ public class RegisterActivity extends AppCompatActivity {
                     public void onResponse(String response) {
                         try{
                             JSONObject jsonObject=new JSONObject(response);
+                            System.out.println(jsonObject);
+
                             String success=jsonObject.getString("response");
+
                             if(success.equals("success")){
+                                String user_id=jsonObject.getString("id");
                                 Toast.makeText(RegisterActivity.this,"Register Success",Toast.LENGTH_SHORT).show();
 
-                                DB.insertUserData( username,email,password);
+                                DB.insertUserData( user_id,nickname,email,password);
                                 startActivity(new Intent(RegisterActivity.this,MenuActivity.class));
                             }
                             else if(success.equals("email_exits")){
@@ -116,7 +123,7 @@ public class RegisterActivity extends AppCompatActivity {
         {
           protected Map<String,String> getParams() throws AuthFailureError{
               Map<String,String> params=new HashMap<>();
-              params.put("name",username);
+              params.put("nickname",nickname);
               params.put("email",email);
               params.put("password",password);
               return params;
