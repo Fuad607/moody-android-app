@@ -15,23 +15,25 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase DB) {
-        DB.execSQL("create Table Userdetails(user_id INTEGER primary key autoincrement, name TEXT, contact TEXT,dob TEXT   )");
+        DB.execSQL("create Table Users( user_id TEXT,  nickname TEXT, email TEXT, password TEXT,user_unique_code TEXT   )");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase DB, int i, int i1) {
-        DB.execSQL("drop Table if exists Userdetails");
+        DB.execSQL("drop Table if exists Users");
 
     }
 
-    public Boolean insertUserData(  String name, String contact, String dob) {
+    public Boolean insertUserData(  String user_id,  String nickname, String email, String password) {
         SQLiteDatabase DB = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
 
-        contentValues.put("name", name);
-        contentValues.put("contact", contact);
-        contentValues.put("dob", dob);
-        long result = DB.insert("Userdetails", null, contentValues);
+        contentValues.put("user_id", user_id);
+        contentValues.put("nickname", nickname);
+        contentValues.put("email", email);
+        contentValues.put("password", password);
+        contentValues.put("user_unique_code", "");
+        long result = DB.insert("Users", null, contentValues);
         if (result == -1) {
             return false;
         } else {
@@ -39,15 +41,15 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
-    public Boolean updateUserData(String userId, String name, String contact, String dob) {
+    public Boolean updateUserData(String user_id, String nickname, String email, String user_unique_code) {
         SQLiteDatabase DB = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put("name", name);
-        contentValues.put("contact", contact);
-        contentValues.put("dob", dob);
-        Cursor cursor = DB.rawQuery("Select * from Userdatails where user_id=?", new String[]{userId});
+        contentValues.put("nickname", nickname);
+        contentValues.put("email", email);
+        contentValues.put("user_unique_code", user_unique_code);
+        Cursor cursor = DB.rawQuery("Select * from Users where user_id=?", new String[]{user_id});
         if (cursor.getCount() > 0) {
-            long result = DB.update("Userdetails", contentValues, "user_id=?", new String[]{userId});
+            long result = DB.update("Users", contentValues, "id=?", new String[]{user_id});
             if (result == -1) {
                 return false;
             } else {
@@ -59,12 +61,12 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
-    public Boolean deleteData(String userId) {
+    public Boolean deleteData(String user_id) {
         SQLiteDatabase DB = this.getWritableDatabase();
 
-        Cursor cursor = DB.rawQuery("Select * from Userdatails where user_id=?", new String[]{userId});
+        Cursor cursor = DB.rawQuery("Select * from Users where user_id=?", new String[]{user_id});
         if (cursor.getCount() > 0) {
-            long result = DB.delete("Userdetails", "user_id=?", new String[]{userId});
+            long result = DB.delete("Users", "user_id=?", new String[]{user_id});
             if (result == -1) {
                 return false;
             } else {
@@ -76,10 +78,10 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
-    public Cursor getData(String userId) {
+    public Cursor getData(String user_id) {
         SQLiteDatabase DB = this.getWritableDatabase();
 
-        Cursor cursor = DB.rawQuery("Select * from Userdatails where user_id=?", new String[]{userId});
+        Cursor cursor = DB.rawQuery("Select * from Users where user_id=?", new String[]{user_id});
         return cursor;
     }
 }
