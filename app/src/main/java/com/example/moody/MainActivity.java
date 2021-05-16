@@ -1,46 +1,41 @@
 package com.example.moody;
 
+import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.example.moody.ui.main.SectionsPagerAdapter;
+import com.example.moody.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
 
-    public void doGetRequest(String Url){
-        RequestQueue queue= Volley.newRequestQueue(MainActivity.this) ;
-        StringRequest stringRequest=new StringRequest(Request.Method.GET, Url, new Response.Listener<String>() {
+    private ActivityMainBinding binding;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
+        ViewPager viewPager = binding.viewPager;
+        viewPager.setAdapter(sectionsPagerAdapter);
+        TabLayout tabs = binding.tabs;
+        tabs.setupWithViewPager(viewPager);
+        FloatingActionButton fab = binding.surveyNext;
+
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onResponse(String response) {
-                Log.d("onResponse", response);
-
-                try{
-                    JSONObject jsonObject=new JSONObject(response);
-                    String success=jsonObject.getString("'success register'");
-
-                    if(success.equals('1')){
-                        Toast.makeText(MainActivity.this,"Register Success",Toast.LENGTH_SHORT).show();
-                    }
-                }catch (JSONException e){
-                    e.printStackTrace();
-                    Toast.makeText(MainActivity.this,"Register Error"+e.toString(),Toast.LENGTH_SHORT).show();
-
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
+            public void onClick(View view) {
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
             }
         });
     }
