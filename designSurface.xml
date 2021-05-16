@@ -7,10 +7,10 @@
         <entry key="app/src/main/res/drawable/ic_baseline_settings_24.xml" value="0.23802083333333332" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.23802083333333332" />
         <entry key="app/src/main/res/layout/activity_history.xml" value="0.1539855072463768" />
-        <entry key="app/src/main/res/layout/activity_login.xml" value="0.18342391304347827" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.18342391304347827" />
+        <entry key="app/src/main/res/layout/activity_login.xml" value="0.19579533941236069" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.19579533941236069" />
         <entry key="app/src/main/res/layout/activity_menu.xml" value="0.18342391304347827" />
-        <entry key="app/src/main/res/layout/activity_register.xml" value="0.1539855072463768" />
+        <entry key="app/src/main/res/layout/activity_register.xml" value="0.19579533941236069" />
         <entry key="app/src/main/res/layout/activity_scrolling.xml" value="0.22509057971014493" />
         <entry key="app/src/main/res/layout/content_scrolling.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_first.xml" value="0.1539855072463768" />
