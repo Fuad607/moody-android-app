@@ -7,6 +7,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.example.moody.Q1Fragment;
+import com.example.moody.Q2Fragment;
+import com.example.moody.Q3Fragment;
+import com.example.moody.Q4Fragment;
 import com.example.moody.R;
 
 /**
@@ -26,9 +30,23 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        // getItem is called to instantiate the fragment for the given page.
-        // Return a PlaceholderFragment (defined as a static inner class below).
-        return PlaceholderFragment.newInstance(position + 1);
+        Fragment fragment = null;
+        switch (position) {
+            case 0:
+                fragment = new Q1Fragment();
+                break;
+            case 1:
+                fragment = new Q2Fragment();
+                break;
+            case 2:
+                fragment = new Q3Fragment();
+                break;
+            case 3:
+                fragment = new Q4Fragment();
+                break;
+
+        }
+        return fragment;
     }
 
     @Nullable

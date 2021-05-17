@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.SeekBar;
 
 import com.example.moody.ui.main.SectionsPagerAdapter;
 import com.example.moody.databinding.ActivityMainBinding;
@@ -16,7 +17,7 @@ import com.example.moody.databinding.ActivityMainBinding;
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
-
+    public SeekBar q1range;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
         TabLayout tabs = binding.tabs;
         tabs.setupWithViewPager(viewPager);
         FloatingActionButton fab = binding.surveyNext;
+
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
