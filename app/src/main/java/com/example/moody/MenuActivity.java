@@ -42,6 +42,13 @@ public class MenuActivity extends AppCompatActivity {
                 case R.id.nav_history:
                     selectedFragment= new HistoryFragment();
                     break;
+                case R.id.nav_log:
+                    selectedFragment= new LogFragment();
+                    break;
+                case R.id.nav_log_out:
+                    startActivity(new Intent(MenuActivity.this,LoginActivity.class));;
+                    finish();
+                    break;
             }
 
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,selectedFragment).commit();

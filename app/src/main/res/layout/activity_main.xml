@@ -26,6 +26,17 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <android.support.design.widget.FloatingActionButton
+        android:id="@+id/surveyPrev"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_margin="@dimen/fab_margin"
+        app:backgroundTint="@color/colorPrimary"
+        app:maxImageSize="50dp"
+        app:srcCompat="@drawable/ic_baseline_navigate_before_24"
+        tools:ignore="VectorDrawableCompat" />
+
+    <android.support.design.widget.FloatingActionButton
         android:id="@+id/surveyNext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
