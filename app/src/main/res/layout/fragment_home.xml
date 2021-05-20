@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".HomeFragment">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="366dp"
+        android:layout_gravity="center"
+        app:srcCompat="@drawable/ic_baseline_calendar_today_24"
+        tools:ignore="VectorDrawableCompat" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/add_mood"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center"
+        android:layout_margin="@dimen/fab_margin"
+        app:backgroundTint="@color/design_default_color_primary_dark"
+        app:hoveredFocusedTranslationZ="6dp"
+        app:maxImageSize="60dp"
+        app:srcCompat="@drawable/ic_baseline_add_circle_outline_24"
+        tools:ignore="VectorDrawableCompat" />
+
+</android.support.design.widget.CoordinatorLayout>

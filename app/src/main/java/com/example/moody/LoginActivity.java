@@ -1,6 +1,7 @@
 package com.example.moody;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Patterns;
@@ -24,7 +25,8 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
-
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 public class LoginActivity extends AppCompatActivity {
 
     private EditText email,password;
@@ -32,7 +34,7 @@ public class LoginActivity extends AppCompatActivity {
     private TextView link_regist;
     private ProgressBar loading;
     private  static  String URL_LOGIN="http://192.168.0.231/api/users/checkUser";
-
+    SharedPreferences sharedPreferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,18 +90,30 @@ public class LoginActivity extends AppCompatActivity {
                     public void onResponse(String response) {
                         try{
                             JSONObject jsonObject=new JSONObject(response);
-                            String success=jsonObject.getString("response");
-                            if(success.equals("success")){
+                            String respond_message=jsonObject.getString("response");
+                            if(respond_message.equals("success")){
+                                JSONObject body=jsonObject.getJSONObject("body");
+                                String user_id = body.getString("id");
+
+
+                                sharedPreferences= getSharedPreferences("USER_DATA", MODE_PRIVATE);
+                                SharedPreferences.Editor editor=sharedPreferences.edit();
+                                editor.putString("USER_ID",user_id);
+
                                 Toast.makeText(LoginActivity.this,"Successly Login",Toast.LENGTH_SHORT).show();
-
-                              startActivity(new Intent(LoginActivity.this,MenuActivity.class));
-
+                                startActivity(new Intent(LoginActivity.this,MenuActivity.class));
 
                             }
-                            else if(success.equals("not_exist")){
+                            else if(respond_message.equals("wrong_credential")){
                                 Toast.makeText(LoginActivity.this,"False Email or Password ",Toast.LENGTH_SHORT).show();
                                 loading.setVisibility(View.GONE);
-                                btn_login.setVisibility(View.VISIBLE);                            }
+                                btn_login.setVisibility(View.VISIBLE);
+                            }
+                            else if(respond_message.equals("not_exist")){
+                                Toast.makeText(LoginActivity.this,"This email not registered",Toast.LENGTH_SHORT).show();
+                                loading.setVisibility(View.GONE);
+                                btn_login.setVisibility(View.VISIBLE);
+                            }
                         }catch (JSONException e){
                             e.printStackTrace();
                             Toast.makeText(LoginActivity.this,"Error"+e.toString(),Toast.LENGTH_SHORT).show();

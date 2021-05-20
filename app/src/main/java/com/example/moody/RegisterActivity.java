@@ -19,11 +19,15 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 
 public class RegisterActivity extends AppCompatActivity {
     private EditText nickname, email, password,c_password;
@@ -31,6 +35,10 @@ public class RegisterActivity extends AppCompatActivity {
     private ProgressBar loading;
     private static String URL_REGIST="http://192.168.0.231/api/users";
     DBHelper DB;
+    public static final String  SHARED_PREFS="sharedPrefs";
+    public static final String  TEXT="text";
+    SharedPreferences sharedPreferences;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,9 +87,6 @@ public class RegisterActivity extends AppCompatActivity {
         final String email= this.email.getText().toString().trim();
         final String password= this.password.getText().toString().trim();
         DB = new DBHelper(RegisterActivity.this);
-        System.out.println(nickname);
-        System.out.println(this.nickname.getText().toString().trim());
-        Log.d("ddd","ddd");
 
         StringRequest stringRequest= new StringRequest(Request.Method.POST, URL_REGIST,
                 new Response.Listener<String>() {
@@ -89,13 +94,21 @@ public class RegisterActivity extends AppCompatActivity {
                     public void onResponse(String response) {
                         try{
                             JSONObject jsonObject=new JSONObject(response);
-                            System.out.println(jsonObject);
-
                             String success=jsonObject.getString("response");
 
                             if(success.equals("success")){
-                                String user_id=jsonObject.getString("id");
+                                JSONObject body=jsonObject.getJSONObject("body");
+                                String user_id = body.getString("id");
+
+                                sharedPreferences= getSharedPreferences("USER_DATA", MODE_PRIVATE);
+                                SharedPreferences.Editor editor=sharedPreferences.edit();
+                                editor.putString("USER_ID",user_id);
+                                editor.apply();
+
                                 Toast.makeText(RegisterActivity.this,"Register Success",Toast.LENGTH_SHORT).show();
+                                 System.out.println("aaa");
+                                System.out.println("aaa");
+
 
                                 DB.insertUserData( user_id,nickname,email,password);
                                 startActivity(new Intent(RegisterActivity.this,MenuActivity.class));
