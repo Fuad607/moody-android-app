@@ -11,6 +11,15 @@
         android:background="@color/colorPrimary"
         android:theme="@style/AppThemeRegist.AppBarOverlay">
 
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/finishSurvey"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+             app:backgroundTint="@color/colorPrimary"
+            app:maxImageSize="50dp"
+            app:srcCompat="@drawable/ic_baseline_highlight_off_24"
+            tools:ignore="VectorDrawableCompat" />
         <android.support.design.widget.TabLayout
             android:id="@+id/tabs"
             android:layout_width="match_parent"

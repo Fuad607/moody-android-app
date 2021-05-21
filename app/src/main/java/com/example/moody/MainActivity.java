@@ -1,6 +1,7 @@
 package com.example.moody;
 
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -33,16 +34,44 @@ public class MainActivity extends AppCompatActivity {
         TabLayout tabs = binding.tabs;
         System.out.println(viewPager);
         tabs.setupWithViewPager(viewPager);
-        FloatingActionButton fab = binding.surveyNext;
+        FloatingActionButton next_button = binding.surveyNext;
+        FloatingActionButton prev_button = binding.surveyPrev;
+        FloatingActionButton finish_survey = binding.finishSurvey;
+        if(viewPager.getCurrentItem()==0){
+            prev_button.hide();
+        }
 
-
-        fab.setOnClickListener(new View.OnClickListener() {
+        next_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                Log.i("MainActivity", "popping backstack");
+                prev_button.show();
+                int current_page=viewPager.getCurrentItem();
+                if(current_page<3){
+                    viewPager.setCurrentItem(current_page+1);
+                }else if(current_page==3){
+                    //send data
+                }
 
             }
         });
+        prev_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int current_page=viewPager.getCurrentItem();
+                viewPager.setCurrentItem(current_page-1);
+                if(current_page==1){
+                    prev_button.hide();
+                }
+            }
+        });
+        finish_survey.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this,MenuActivity.class));
+                finish();
+            }
+        });
+
+
     }
 }

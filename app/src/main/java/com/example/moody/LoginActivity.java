@@ -73,7 +73,6 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(new Intent(LoginActivity.this,RegisterActivity.class));
             }
         });
-
     }
 
     private void Login(){
@@ -82,7 +81,6 @@ public class LoginActivity extends AppCompatActivity {
 
         final String email= this.email.getText().toString().trim();
         final String password= this.password.getText().toString().trim();
-
 
         StringRequest stringRequest= new StringRequest(Request.Method.PUT, URL_LOGIN,
                 new Response.Listener<String>() {
@@ -95,14 +93,12 @@ public class LoginActivity extends AppCompatActivity {
                                 JSONObject body=jsonObject.getJSONObject("body");
                                 String user_id = body.getString("id");
 
-
                                 sharedPreferences= getSharedPreferences("USER_DATA", MODE_PRIVATE);
                                 SharedPreferences.Editor editor=sharedPreferences.edit();
                                 editor.putString("USER_ID",user_id);
 
                                 Toast.makeText(LoginActivity.this,"Successly Login",Toast.LENGTH_SHORT).show();
                                 startActivity(new Intent(LoginActivity.this,MenuActivity.class));
-
                             }
                             else if(respond_message.equals("wrong_credential")){
                                 Toast.makeText(LoginActivity.this,"False Email or Password ",Toast.LENGTH_SHORT).show();
