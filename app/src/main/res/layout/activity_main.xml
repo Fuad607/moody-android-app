@@ -28,31 +28,40 @@
             app:tabIndicatorColor="@color/colorPrimary" />
     </android.support.design.widget.AppBarLayout>
 
+
     <android.support.v4.view.ViewPager
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="582dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/surveyPrev"
-        android:layout_width="wrap_content"
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:layout_margin="@dimen/fab_margin"
-        app:backgroundTint="@color/colorPrimary"
-        app:maxImageSize="50dp"
-        app:srcCompat="@drawable/ic_baseline_navigate_before_24"
-        tools:ignore="VectorDrawableCompat" />
+        android:layout_margin="2dp"
+        app:cardCornerRadius="2dp"
+        app:contentPadding="2dp">
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/surveyNext"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        app:backgroundTint="@color/colorPrimary"
-        app:maxImageSize="50dp"
-        app:srcCompat="@drawable/ic_baseline_navigate_next_24"
-        tools:ignore="VectorDrawableCompat" />
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/surveyPrev"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/fab_margin"
+            app:backgroundTint="@color/colorPrimary"
+            app:maxImageSize="50dp"
+            app:srcCompat="@drawable/ic_baseline_navigate_before_24"
+            tools:ignore="VectorDrawableCompat" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/surveyNext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/fab_margin"
+            app:backgroundTint="@color/colorPrimary"
+            app:maxImageSize="50dp"
+            app:srcCompat="@drawable/ic_baseline_navigate_next_24"
+            tools:ignore="VectorDrawableCompat" />
+    </android.support.v7.widget.CardView>
 </android.support.design.widget.CoordinatorLayout>

@@ -106,9 +106,6 @@ public class RegisterActivity extends AppCompatActivity {
                                 editor.apply();
 
                                 Toast.makeText(RegisterActivity.this,"Register Success",Toast.LENGTH_SHORT).show();
-                                 System.out.println("aaa");
-                                System.out.println("aaa");
-
 
                                 DB.insertUserData( user_id,nickname,email,password);
                                 startActivity(new Intent(RegisterActivity.this,MenuActivity.class));

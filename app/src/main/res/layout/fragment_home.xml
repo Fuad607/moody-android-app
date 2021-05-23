@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center"
         android:layout_margin="@dimen/fab_margin"
-        app:backgroundTint="@color/design_default_color_primary_dark"
+        app:backgroundTint="@color/colorPrimaryDark"
         app:hoveredFocusedTranslationZ="6dp"
         app:maxImageSize="60dp"
         app:srcCompat="@drawable/ic_baseline_add_circle_outline_24"

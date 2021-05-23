@@ -46,7 +46,6 @@ public class LoginActivity extends AppCompatActivity {
         btn_login=findViewById(R.id.btn_login);
         link_regist=findViewById(R.id.link_regist);
 
-
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -58,7 +57,6 @@ public class LoginActivity extends AppCompatActivity {
                     email.setError("Please insert valid email address!");
                 } else if(mpassword.isEmpty()){
                     password.setError("Please insert password!");
-
                 }else{
                     email.setError(null);
                     password.setError(null);
@@ -89,6 +87,7 @@ public class LoginActivity extends AppCompatActivity {
                         try{
                             JSONObject jsonObject=new JSONObject(response);
                             String respond_message=jsonObject.getString("response");
+                            System.out.println(respond_message);
                             if(respond_message.equals("success")){
                                 JSONObject body=jsonObject.getJSONObject("body");
                                 String user_id = body.getString("id");
@@ -96,6 +95,7 @@ public class LoginActivity extends AppCompatActivity {
                                 sharedPreferences= getSharedPreferences("USER_DATA", MODE_PRIVATE);
                                 SharedPreferences.Editor editor=sharedPreferences.edit();
                                 editor.putString("USER_ID",user_id);
+                                editor.apply();
 
                                 Toast.makeText(LoginActivity.this,"Successly Login",Toast.LENGTH_SHORT).show();
                                 startActivity(new Intent(LoginActivity.this,MenuActivity.class));
