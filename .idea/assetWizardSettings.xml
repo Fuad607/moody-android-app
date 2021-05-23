@@ -23,7 +23,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="jar:file:/private/var/folders/q2/w506mvjx4mjg1r7rcymzhndw0000gn/T/AppTranslocation/E85ECF0A-E42F-451D-8C9F-3CB3AB8B0848/d/Android%20Studio.app/Contents/plugins/android/lib/android.jar!/images/material/icons/materialicons/navigate_before/baseline_navigate_before_24.xml" />
+                                      <entry key="url" value="jar:file:/private/var/folders/q2/w506mvjx4mjg1r7rcymzhndw0000gn/T/AppTranslocation/E85ECF0A-E42F-451D-8C9F-3CB3AB8B0848/d/Android%20Studio.app/Contents/plugins/android/lib/android.jar!/images/material/icons/materialicons/search/baseline_search_24.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -34,7 +34,7 @@
                         <option name="values">
                           <map>
                             <entry key="color" value="ffffff" />
-                            <entry key="outputName" value="ic_baseline_navigate_before_24" />
+                            <entry key="outputName" value="ic_baseline_search_24" />
                             <entry key="sourceFile" value="$PROJECT_DIR$/../Downloads/grimacing-face-svgrepo-com.svg" />
                           </map>
                         </option>
