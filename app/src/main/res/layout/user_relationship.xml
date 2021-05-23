@@ -27,18 +27,36 @@ android:layout_margin="8dp">
             android:text="TextView1"
             android:layout_weight="1"
             android:textColor="#000"
+            android:textSize="13dp"
             android:layout_toLeftOf="@+id/checkBox"
             android:layout_toStartOf="@+id/checkBox" />
-        <TextView
-            android:id="@+id/tv_fruit_price"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:textColor="#000"
-            android:layout_weight="1"
-            android:layout_toLeftOf="@+id/checkBox"
-            android:layout_toStartOf="@+id/checkBox"
-            android:text="TextView" />
 
-
+        <Button
+            android:id="@+id/metting_type_1"
+            android:layout_width="48dp"
+            android:layout_height="33dp"
+            android:layout_toStartOf="@+id/tv_user_name"
+            android:layout_toLeftOf="@+id/tv_user_name"
+            android:text="F2F"
+            android:textSize="11dp"
+            android:textColor="#000" />
+        <Button
+            android:id="@+id/metting_type_2"
+            android:layout_width="65dp"
+            android:layout_height="33dp"
+            android:layout_toStartOf="@+id/metting_type_1"
+            android:layout_toLeftOf="@+id/metting_type_1"
+            android:text="Video"
+            android:textSize="11dp"
+            android:textColor="#000" />
+        <Button
+            android:id="@+id/metting_type_3"
+            android:layout_width="70dp"
+            android:layout_height="33dp"
+            android:layout_toStartOf="@+id/metting_type_2"
+            android:layout_toLeftOf="@+id/metting_type_2"
+            android:text="Other"
+            android:textSize="11dp"
+            android:textColor="#000" />
     </LinearLayout>
 </LinearLayout>
