@@ -13,7 +13,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.SeekBar;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.moody.ui.main.SectionsPagerAdapter;
 import com.example.moody.databinding.ActivityMainBinding;
@@ -22,6 +26,12 @@ public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
     public SeekBar q1range;
+    RadioGroup radioGroup;
+    RadioButton selectedRadioButton;
+    Spinner  special_situation;
+    SeekBar question_1;
+    SeekBar question_2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +61,19 @@ public class MainActivity extends AppCompatActivity {
                     viewPager.setCurrentItem(current_page+1);
                 }else if(current_page==3){
                     //send data
+
+                    Spinner  special_situation = (Spinner)view.findViewById(R.id.special_situation);
+                     //Toast.makeText( special_situation.getText(), "Selected: " , Toast.LENGTH_LONG).show();
+                    // find the radiobutton by returned id#
+                      radioGroup = findViewById(R.id.radioGroup);
+                    int selectedRadioButtonId = radioGroup.getCheckedRadioButtonId();
+                    if (selectedRadioButtonId != -1) {
+                        selectedRadioButton = findViewById(selectedRadioButtonId);
+                        String selectedRbText = selectedRadioButton.getText().toString();
+                         System.out.println(selectedRbText+" is selected");
+                     }
+
+
                 }
 
             }

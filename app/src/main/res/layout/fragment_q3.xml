@@ -9,7 +9,7 @@
     <EditText
         android:id="@+id/search_text"
         android:layout_height="wrap_content"
-        android:layout_width="300dp"
+        android:layout_width="325dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="30dp"
         android:background="@drawable/search_bg"
@@ -36,7 +36,7 @@
         android:id="@+id/searchButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="315dp"
+        android:layout_marginLeft="340dp"
         android:layout_marginTop="30dp"
         app:backgroundTint="@color/colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
