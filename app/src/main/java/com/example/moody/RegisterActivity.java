@@ -104,9 +104,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 SharedPreferences.Editor editor=sharedPreferences.edit();
                                 editor.putString("USER_ID",user_id);
                                 editor.apply();
-
                                 Toast.makeText(RegisterActivity.this,"Register Success",Toast.LENGTH_SHORT).show();
-
                                 DB.insertUserData( user_id,nickname,email,password);
                                 startActivity(new Intent(RegisterActivity.this,MenuActivity.class));
                             }
