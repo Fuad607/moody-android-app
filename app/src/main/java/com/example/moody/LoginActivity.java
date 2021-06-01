@@ -33,7 +33,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button btn_login;
     private TextView link_regist;
     private ProgressBar loading;
-    private  static  String URL_LOGIN="http://192.168.0.231/api/users/checkUser";
+    private  static  String URL_LOGIN="http://192.168.0.16/api/users/checkUser";
     SharedPreferences sharedPreferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

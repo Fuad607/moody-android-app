@@ -4,10 +4,14 @@
       <root url="file://$PROJECT_DIR$/../.gradle/caches/transforms-2/files-2.1/7a447c4c66a7d2e9f3a7afeb688cafef/navigation-fragment-1.0.0/res" />
       <root url="jar://$PROJECT_DIR$/../.gradle/caches/transforms-2/files-2.1/7a447c4c66a7d2e9f3a7afeb688cafef/navigation-fragment-1.0.0/jars/classes.jar!/" />
       <root url="file://$PROJECT_DIR$/../.gradle/caches/transforms-2/files-2.1/7a447c4c66a7d2e9f3a7afeb688cafef/navigation-fragment-1.0.0/AndroidManifest.xml" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/5dc4bc387f7ca3facdb278561dd431e5/navigation-fragment-1.0.0/AndroidManifest.xml" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/5dc4bc387f7ca3facdb278561dd431e5/navigation-fragment-1.0.0/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/5dc4bc387f7ca3facdb278561dd431e5/navigation-fragment-1.0.0/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
       <root url="jar://$PROJECT_DIR$/../.gradle/caches/modules-2/files-2.1/android.arch.navigation/navigation-fragment/1.0.0/d3ddef8af9d3ec5b2cff1988d8231080b31459be/navigation-fragment-1.0.0-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/android.arch.navigation/navigation-fragment/1.0.0/d3ddef8af9d3ec5b2cff1988d8231080b31459be/navigation-fragment-1.0.0-sources.jar!/" />
     </SOURCES>
   </library>
 </component>
