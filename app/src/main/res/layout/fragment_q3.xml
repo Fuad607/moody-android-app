@@ -9,21 +9,22 @@
     <EditText
         android:id="@+id/search_text"
         android:layout_height="wrap_content"
-        android:layout_width="325dp"
+        android:layout_width="match_parent"
         android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
         android:layout_marginTop="30dp"
         android:background="@drawable/search_bg"
-        android:elevation="4dp"
+        android:elevation="6dp"
         android:hint="Search"
         android:inputType="textPersonName"
         android:lineSpacingExtra="10sp"
-        android:paddingTop="25dp"
-        android:paddingLeft="15dp"
+        android:paddingTop="20dp"
+        android:paddingLeft="20dp"
         android:paddingBottom="10dp"
         android:selectAllOnFocus="false"
         android:singleLine="false"
         android:textColor="@color/colorText"
-        android:textSize="14sp"
+        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -32,7 +33,7 @@
         app:layout_constraintVertical_bias="0"
         app:layout_constraintWidth_percent=".7"
         />
-    <android.support.design.widget.FloatingActionButton
+<!--    <android.support.design.widget.FloatingActionButton
         android:id="@+id/searchButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -47,7 +48,7 @@
         app:layout_constraintVertical_bias="0"
         app:maxImageSize="35dp"
         app:srcCompat="@drawable/ic_baseline_search_24"
-        tools:ignore="VectorDrawableCompat" />
+        tools:ignore="VectorDrawableCompat" />-->
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"

@@ -32,31 +32,39 @@ android:layout_margin="8dp">
             android:layout_toStartOf="@+id/checkBox" />
 
         <Button
+            android:visibility="invisible"
             android:id="@+id/metting_type_1"
             android:layout_width="48dp"
-            android:layout_height="33dp"
+            android:layout_marginRight="7dp"
+            android:layout_height="match_parent"
             android:layout_toStartOf="@+id/tv_user_name"
             android:layout_toLeftOf="@+id/tv_user_name"
             android:text="F2F"
             android:textSize="11dp"
+            android:background="@color/colorUnSelected"
             android:textColor="#000" />
         <Button
+            android:visibility="invisible"
             android:id="@+id/metting_type_2"
             android:layout_width="65dp"
-            android:layout_height="33dp"
+            android:layout_marginRight="7dp"
+            android:layout_height="match_parent"
             android:layout_toStartOf="@+id/metting_type_1"
             android:layout_toLeftOf="@+id/metting_type_1"
             android:text="Video"
             android:textSize="11dp"
+            android:background="@color/colorUnSelected"
             android:textColor="#000" />
         <Button
+            android:visibility="invisible"
             android:id="@+id/metting_type_3"
             android:layout_width="70dp"
-            android:layout_height="33dp"
+            android:layout_height="match_parent"
             android:layout_toStartOf="@+id/metting_type_2"
             android:layout_toLeftOf="@+id/metting_type_2"
             android:text="Other"
             android:textSize="11dp"
+            android:background="@color/colorUnSelected"
             android:textColor="#000" />
     </LinearLayout>
 </LinearLayout>

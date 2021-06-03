@@ -1,6 +1,7 @@
 package com.example.moody;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -22,15 +23,20 @@ import android.widget.Toast;
 import com.example.moody.ui.main.SectionsPagerAdapter;
 import com.example.moody.databinding.ActivityMainBinding;
 
+import java.util.HashMap;
+
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
-    public SeekBar q1range;
+    public static int q1range = 5;
+    public static int q2range = 5;
+    public static HashMap<String, String> q3 = new HashMap<>();
+    public static String q4question = "", q4answer = "";
+    DBHelper DB;
+    String USER_ID;
+
     RadioGroup radioGroup;
     RadioButton selectedRadioButton;
-    Spinner  special_situation;
-    SeekBar question_1;
-    SeekBar question_2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +57,8 @@ public class MainActivity extends AppCompatActivity {
         if(viewPager.getCurrentItem()==0){
             prev_button.hide();
         }
+        SharedPreferences sharedPreferences = getSharedPreferences("USER_DATA", MODE_PRIVATE);
+        USER_ID = sharedPreferences.getString("USER_ID","");
 
         next_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,9 +78,13 @@ public class MainActivity extends AppCompatActivity {
                     if (selectedRadioButtonId != -1) {
                         selectedRadioButton = findViewById(selectedRadioButtonId);
                         String selectedRbText = selectedRadioButton.getText().toString();
-                         System.out.println(selectedRbText+" is selected");
+                        // System.out.println(selectedRbText+" is selected");
+                         MainActivity.q4answer = selectedRbText;
                      }
 
+                    Log.d("output", q1range + ", " + q2range + ", " + q3.toString() + ", " + q4question + ", " + q4answer);
+                    DB = new DBHelper(MainActivity.this);
+                    DB.inserSurvey(USER_ID,q1range,q2range);
 
                 }
 

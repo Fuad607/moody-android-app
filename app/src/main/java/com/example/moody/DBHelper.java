@@ -13,7 +13,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public DBHelper(@Nullable Context context) {
         super(context, "Userdata.db", null, 1);
-     }
+    }
 
     @Override
     public void onCreate(SQLiteDatabase DB) {
@@ -32,7 +32,7 @@ public class DBHelper extends SQLiteOpenHelper {
         onCreate(DB);
     }
 
-    public Boolean insertUserData(  String user_id,  String nickname, String email, String password) {
+    public Boolean insertUserData(String user_id, String nickname, String email, String password) {
         SQLiteDatabase DB = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
 
@@ -92,8 +92,8 @@ public class DBHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
-//UserRelationship data
-    public Boolean insertUserRelationshipData(  String user_id,  String nickname, String contacted_user_id, String type) {
+    //UserRelationship data
+    public Long insertUserRelationshipData(String user_id, String nickname, String contacted_user_id, String type) {
         SQLiteDatabase DB = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
 
@@ -102,17 +102,14 @@ public class DBHelper extends SQLiteOpenHelper {
         contentValues.put("contacted_user_id", contacted_user_id);
         contentValues.put("type", type);
         long result = DB.insert("UserRelationship", null, contentValues);
-        if (result == -1) {
-            return false;
-        } else {
-            return true;
-        }
+
+        return result;
     }
 
     public Cursor getUserRelationshipData(String user_id) {
         SQLiteDatabase DB = this.getReadableDatabase();
 
-        Cursor cursor = DB.rawQuery("Select * from UserRelationship where user_id="+user_id,null);
+        Cursor cursor = DB.rawQuery("Select * from UserRelationship where user_id=" + user_id, null);
 
         return cursor;
     }
@@ -121,27 +118,30 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase DB = this.getWritableDatabase();
         DB.execSQL("delete from  UserRelationship");
     }
-//Survey data
-    public Boolean inserSurvey(  String user_id,  String nickname, String contacted_user_id, String type) {
+
+    //Survey data
+    public Long inserSurvey(String user_id, Integer mood_level, Integer relaxed_level) {
         SQLiteDatabase DB = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
 
+        Long tsLong = System.currentTimeMillis()/1000;
+        String ts = tsLong.toString();
+
         contentValues.put("user_id", user_id);
-        contentValues.put("nickname", nickname);
-        contentValues.put("contacted_user_id", contacted_user_id);
-        contentValues.put("type", type);
+        contentValues.put("mood_level", mood_level);
+        contentValues.put("relaxed_level", relaxed_level);
+        contentValues.put("timestamp", ts);
+        contentValues.put("deleted", 0);
+        contentValues.put("sync", 0);
         long result = DB.insert("Survey", null, contentValues);
-        if (result == -1) {
-            return false;
-        } else {
-            return true;
-        }
+
+        return result;
     }
 
     public Cursor geSurvey(String user_id) {
         SQLiteDatabase DB = this.getReadableDatabase();
 
-        Cursor cursor = DB.rawQuery("Select * from Survey where user_id="+user_id,null);
+        Cursor cursor = DB.rawQuery("Select * from Survey where user_id=" + user_id, null);
 
         return cursor;
     }
@@ -150,5 +150,4 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase DB = this.getWritableDatabase();
         DB.execSQL("delete from  Survey");
     }
-
 }

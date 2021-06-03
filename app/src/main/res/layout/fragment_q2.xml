@@ -44,7 +44,7 @@
                 android:textSize="12sp"/>
 
             <SeekBar
-                android:id="@+id/seekBar1"
+                android:id="@+id/seekBar2"
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_marginTop="25dp"
