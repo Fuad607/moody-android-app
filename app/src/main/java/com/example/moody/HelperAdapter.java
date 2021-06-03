@@ -17,13 +17,11 @@ import java.util.ArrayList;
 public class HelperAdapter extends RecyclerView.Adapter {
 
     Context context;
-    ArrayList arrayList,
-            arrayListName;
+    ArrayList<String>  arrayList;
 
-    public HelperAdapter(Context context, ArrayList arrayListName){
+    public HelperAdapter(Context context,  ArrayList<String> arrayList){
         this.context=context;
-      //  this.arrayList=arrayList;
-        this.arrayListName=arrayListName;
+        this.arrayList=arrayList;
     }
 
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
@@ -35,7 +33,7 @@ public class HelperAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(@NonNull @NotNull RecyclerView.ViewHolder viewHolder, int position) {
         ViewHolderClass viewHolderClass=(ViewHolderClass)viewHolder;
-        viewHolderClass.textView.setText(UserRelationship.names[position]);
+        viewHolderClass.textView.setText(arrayList.get(position));
 
         viewHolderClass.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,7 +45,7 @@ public class HelperAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        return arrayListName.size();
+        return arrayList.size();
     }
 
     public class ViewHolderClass extends RecyclerView.ViewHolder{

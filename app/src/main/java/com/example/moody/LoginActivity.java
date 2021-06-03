@@ -20,6 +20,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -33,6 +34,11 @@ public class LoginActivity extends AppCompatActivity {
     private Button btn_login;
     private TextView link_regist;
     private ProgressBar loading;
+    private static String URL_USER_RELATIONSHIP = "http://192.168.0.16/api/userrelationship/getallbyid/";
+    String USER_ID;
+    DBHelper DB;
+    JSONArray jsonArray;
+    JSONObject jsonObjectUserData;
     private  static  String URL_LOGIN="http://192.168.0.16/api/users/checkUser";
     SharedPreferences sharedPreferences;
     @Override
@@ -89,14 +95,15 @@ public class LoginActivity extends AppCompatActivity {
                             String respond_message=jsonObject.getString("response");
                             System.out.println(respond_message);
                             if(respond_message.equals("success")){
-                                JSONObject body=jsonObject.getJSONObject("body");
-                                String user_id = body.getString("id");
+                                jsonObjectUserData=jsonObject.getJSONObject("body");
+                                String user_id = jsonObjectUserData.getString("id");
 
                                 sharedPreferences= getSharedPreferences("USER_DATA", MODE_PRIVATE);
                                 SharedPreferences.Editor editor=sharedPreferences.edit();
                                 editor.putString("USER_ID",user_id);
                                 editor.apply();
 
+                                sync_data(user_id);
                                 Toast.makeText(LoginActivity.this,"Successly Login",Toast.LENGTH_SHORT).show();
                                 startActivity(new Intent(LoginActivity.this,MenuActivity.class));
                             }
@@ -135,6 +142,37 @@ public class LoginActivity extends AppCompatActivity {
             }
         };
         RequestQueue requestQueue= Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+    }
+
+    private void sync_data(String user_id){
+        DB = new DBHelper(LoginActivity.this);
+        DB.deleteAlUserRelationship();
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, URL_USER_RELATIONSHIP + user_id,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            jsonArray = new JSONArray(response);
+
+                            for (int i=0; i<jsonArray.length(); i++) {
+                                JSONObject user_relationship = jsonArray.getJSONObject(i);
+
+                                DB.insertUserRelationshipData( user_id,user_relationship.getString("nickname"),user_relationship.getString("contacted_user_id"),user_relationship.getString("type"));
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                    }
+                });
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
     }
 }

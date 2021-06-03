@@ -26,10 +26,7 @@ import org.json.JSONObject;
 
 public class MenuActivity extends AppCompatActivity {
     SharedPreferences sharedpreferences;
-    private static String URL_USER_RELATIONSHIP = "http://192.168.0.16/api/userrelationship/getallbyid/";
     String USER_ID;
-    DBHelper DB;
-    JSONArray jsonArray;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,40 +35,11 @@ public class MenuActivity extends AppCompatActivity {
 
         SharedPreferences sharedPreferences = getSharedPreferences("USER_DATA", MODE_PRIVATE);
         USER_ID = sharedPreferences.getString("USER_ID","");
-        DB = new DBHelper(MenuActivity.this);
-
-
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, URL_USER_RELATIONSHIP + USER_ID,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            jsonArray = new JSONArray(response);
-
-                            for (int i=0; i<jsonArray.length(); i++) {
-                                JSONObject user_relationship = jsonArray.getJSONObject(i);
-
-                                DB.insertUserRelationshipData( USER_ID,user_relationship.getString("nickname"),user_relationship.getString("contacted_user_id"),user_relationship.getString("type"));
-                            }
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                    }
-                });
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(stringRequest);
 
         BottomNavigationView bottom_nav =findViewById(R.id.bottom_nav);
         bottom_nav.setOnNavigationItemSelectedListener(navListener);
 
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new HomeFragment()).commit();
-
     }
     private BottomNavigationView.OnNavigationItemSelectedListener navListener=new BottomNavigationView.OnNavigationItemSelectedListener() {
         @Override

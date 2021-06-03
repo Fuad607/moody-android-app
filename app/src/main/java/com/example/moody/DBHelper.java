@@ -27,6 +27,9 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase DB, int i, int i1) {
         DB.execSQL("drop Table if exists Users");
         DB.execSQL("drop Table if exists UserRelationship");
+        DB.execSQL("drop Table if exists Survey");
+        DB.execSQL("drop Table if exists UserMeeting");
+        onCreate(DB);
     }
 
     public Boolean insertUserData(  String user_id,  String nickname, String email, String password) {
@@ -83,7 +86,7 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     public Cursor getData(String user_id) {
-        SQLiteDatabase DB = this.getWritableDatabase();
+        SQLiteDatabase DB = this.getReadableDatabase();
 
         Cursor cursor = DB.rawQuery("Select * from Users where user_id=?", new String[]{user_id});
         return cursor;
@@ -109,25 +112,43 @@ public class DBHelper extends SQLiteOpenHelper {
     public Cursor getUserRelationshipData(String user_id) {
         SQLiteDatabase DB = this.getReadableDatabase();
 
-        Cursor cursor = DB.rawQuery("Select * from UserRelationship where user_id=6",null);
+        Cursor cursor = DB.rawQuery("Select * from UserRelationship where user_id="+user_id,null);
 
-        System.out.println(cursor);
         return cursor;
     }
 
-    public ArrayList<String> getAllCotacts() {
-        ArrayList<String> array_list = new ArrayList<String>();
+    public void deleteAlUserRelationship() {
+        SQLiteDatabase DB = this.getWritableDatabase();
+        DB.execSQL("delete from  UserRelationship");
+    }
+//Survey data
+    public Boolean inserSurvey(  String user_id,  String nickname, String contacted_user_id, String type) {
+        SQLiteDatabase DB = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
 
-        //hp = new HashMap();
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res =  db.rawQuery( "Select * from UserRelationship where user_id=6", null );
-        res.moveToFirst();
-
-        while(res.isAfterLast() == false){
-
+        contentValues.put("user_id", user_id);
+        contentValues.put("nickname", nickname);
+        contentValues.put("contacted_user_id", contacted_user_id);
+        contentValues.put("type", type);
+        long result = DB.insert("Survey", null, contentValues);
+        if (result == -1) {
+            return false;
+        } else {
+            return true;
         }
-        return array_list;
+    }
 
+    public Cursor geSurvey(String user_id) {
+        SQLiteDatabase DB = this.getReadableDatabase();
+
+        Cursor cursor = DB.rawQuery("Select * from Survey where user_id="+user_id,null);
+
+        return cursor;
+    }
+
+    public void deleteAlSurvey() {
+        SQLiteDatabase DB = this.getWritableDatabase();
+        DB.execSQL("delete from  Survey");
     }
 
 }

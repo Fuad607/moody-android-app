@@ -3,6 +3,8 @@ package com.example.moody;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.Fragment;
@@ -44,7 +46,7 @@ public class Q3Fragment extends Fragment {
     ArrayList name;
     JSONObject jsonObject;
     JSONArray jsonArray;
-     public String USER_ID;
+    public String USER_ID;
     DBHelper DB;
 
     List<String> allNames = new ArrayList<String>();
@@ -64,16 +66,19 @@ public class Q3Fragment extends Fragment {
         sharedPreferences = this.getActivity().getSharedPreferences("USER_DATA", Context.MODE_PRIVATE);
         USER_ID = sharedPreferences.getString("USER_ID", "");
         System.out.println(USER_ID);
-        name=DB.getAllCotacts( );
-        System.out.println(name);
+        ArrayList<String> array_list = new ArrayList<String>();
 
+        DB=new DBHelper(getContext());
+        //hp = new HashMap();
+        Cursor cursor_user_relationship = DB.getUserRelationshipData(USER_ID);
+        cursor_user_relationship.moveToFirst();
 
-        name = new ArrayList();
-        for (int i = 0; i < UserRelationship.names.length; i++) {
-            name.add(UserRelationship.names);
+        while(cursor_user_relationship.isAfterLast() == false){
+            array_list.add(cursor_user_relationship.getString(cursor_user_relationship.getColumnIndex("nickname")));
+            cursor_user_relationship.moveToNext();
         }
 
-        HelperAdapter helperAdapter = new HelperAdapter(getContext(), name);
+        HelperAdapter helperAdapter = new HelperAdapter(getContext(), array_list);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(helperAdapter);

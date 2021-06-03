@@ -104,8 +104,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 editor.putString("USER_ID",user_id);
                                 editor.apply();
                                 Toast.makeText(RegisterActivity.this,"Register Success",Toast.LENGTH_SHORT).show();
-                                DB.insertUserData( user_id,nickname,email,password);
-                                startActivity(new Intent(RegisterActivity.this,MenuActivity.class));
+                                startActivity(new Intent(RegisterActivity.this,LoginActivity.class));
                             }
                             else if(success.equals("email_exits")){
                                 Toast.makeText(RegisterActivity.this,"Email already used",Toast.LENGTH_SHORT).show();
