@@ -20,7 +20,8 @@ public class DBHelper extends SQLiteOpenHelper {
         DB.execSQL("create Table Users( id INTEGER primary key autoincrement,user_id TEXT,  nickname TEXT, email TEXT, password TEXT,user_unique_code TEXT   )");
         DB.execSQL("create Table UserRelationship( id INTEGER primary key autoincrement,user_id TEXT,  nickname TEXT, contacted_user_id TEXT,  type TEXT)");
         DB.execSQL("create Table Survey( id INTEGER primary key autoincrement,user_id TEXT,  mood_level INTEGER, relaxed_level INTEGER,  timestamp INTEGER,  deleted INTEGER,  sync INTEGER)");
-        DB.execSQL("create Table UserMeeting( id INTEGER primary key autoincrement,survey_id TEXT,  contacted_user_id INTEGER, meeting_type TEXT)");
+        DB.execSQL("create Table UserMeeting( id INTEGER primary key autoincrement,survey_id TEXT,  contacted_user_id TEXT, meeting_type TEXT)");
+        DB.execSQL("create Table UserSpecialSituation( id INTEGER primary key autoincrement,survey_id TEXT,  special_situation TEXT, special_situation_type INTEGER)");
     }
 
     @Override
@@ -29,6 +30,7 @@ public class DBHelper extends SQLiteOpenHelper {
         DB.execSQL("drop Table if exists UserRelationship");
         DB.execSQL("drop Table if exists Survey");
         DB.execSQL("drop Table if exists UserMeeting");
+        DB.execSQL("drop Table if exists UserSpecialSituation");
         onCreate(DB);
     }
 
@@ -120,11 +122,11 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     //Survey data
-    public Long inserSurvey(String user_id, Integer mood_level, Integer relaxed_level) {
+    public Long insertSurvey(String user_id, Integer mood_level, Integer relaxed_level) {
         SQLiteDatabase DB = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
 
-        Long tsLong = System.currentTimeMillis()/1000;
+        Long tsLong = System.currentTimeMillis() / 1000;
         String ts = tsLong.toString();
 
         contentValues.put("user_id", user_id);
@@ -138,16 +140,68 @@ public class DBHelper extends SQLiteOpenHelper {
         return result;
     }
 
-    public Cursor geSurvey(String user_id) {
+    public Cursor getSurvey() {
         SQLiteDatabase DB = this.getReadableDatabase();
 
-        Cursor cursor = DB.rawQuery("Select * from Survey where user_id=" + user_id, null);
+        Cursor cursor = DB.rawQuery("Select * from Survey where sync=0", null);
 
         return cursor;
     }
 
-    public void deleteAlSurvey() {
+    public void deleteAllSurvey() {
         SQLiteDatabase DB = this.getWritableDatabase();
         DB.execSQL("delete from  Survey");
+    }
+
+    //UserMeeting data
+    public Long insertUserMeeting(String survey_id, String contacted_user_id, String meeting_type) {
+        SQLiteDatabase DB = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put("survey_id", survey_id);
+        contentValues.put("contacted_user_id", contacted_user_id);
+        contentValues.put("meeting_type", meeting_type);
+        long result = DB.insert("UserMeeting", null, contentValues);
+
+        return result;
+    }
+
+    public Cursor getUserMeeting(String survey_id) {
+        SQLiteDatabase DB = this.getReadableDatabase();
+
+        Cursor cursor = DB.rawQuery("Select * from UserMeeting where survey_id=" + survey_id, null);
+
+        return cursor;
+    }
+
+    public void deleteAllUserMeeting() {
+        SQLiteDatabase DB = this.getWritableDatabase();
+        DB.execSQL("delete from  UserMeeting");
+    }
+
+    //UserMeeting data
+    public Long insertUserSpecialSituation(String survey_id, String special_situation, String special_situation_type) {
+        SQLiteDatabase DB = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put("survey_id", survey_id);
+        contentValues.put("special_situation", special_situation);
+        contentValues.put("special_situation_type", special_situation_type);
+        long result = DB.insert("UserSpecialSituation", null, contentValues);
+
+        return result;
+    }
+
+    public Cursor getUserSpecialSituation(String survey_id) {
+        SQLiteDatabase DB = this.getReadableDatabase();
+
+        Cursor cursor = DB.rawQuery("Select * from UserSpecialSituation where survey_id=" + survey_id, null);
+
+        return cursor;
+    }
+
+    public void deleteAllUserSpecialSituation() {
+        SQLiteDatabase DB = this.getWritableDatabase();
+        DB.execSQL("delete from  UserSpecialSituation");
     }
 }

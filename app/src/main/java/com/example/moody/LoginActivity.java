@@ -148,6 +148,9 @@ public class LoginActivity extends AppCompatActivity {
     private void sync_data(String user_id){
         DB = new DBHelper(LoginActivity.this);
         DB.deleteAlUserRelationship();
+        DB.deleteAllSurvey();
+        DB.deleteAllUserMeeting();
+        DB.deleteAllUserSpecialSituation();
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, URL_USER_RELATIONSHIP + user_id,
                 new Response.Listener<String>() {
@@ -174,5 +177,8 @@ public class LoginActivity extends AppCompatActivity {
                 });
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
+
+
+
     }
 }

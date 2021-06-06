@@ -75,7 +75,7 @@ public class Q3Fragment extends Fragment {
         ArrayList<String> array_list_contacted_user_id_filtered = new ArrayList<String>();
 
         DB=new DBHelper(getContext());
-        //hp = new HashMap();
+
         Cursor cursor_user_relationship = DB.getUserRelationshipData(USER_ID);
         cursor_user_relationship.moveToFirst();
 

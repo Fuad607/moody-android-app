@@ -1,28 +1,24 @@
 package com.example.moody;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.content.SharedPreferences;
-import android.view.View;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkInfo;
+import androidx.work.WorkManager;
 
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+
+import java.util.Observable;
+import java.util.Observer;
+import java.util.concurrent.TimeUnit;
 
 public class MenuActivity extends AppCompatActivity {
     SharedPreferences sharedpreferences;
@@ -40,6 +36,15 @@ public class MenuActivity extends AppCompatActivity {
         bottom_nav.setOnNavigationItemSelectedListener(navListener);
 
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new HomeFragment()).commit();
+
+        OneTimeWorkRequest request=new OneTimeWorkRequest.Builder(MyWorker.class).build();
+        WorkManager.getInstance().enqueue(request);
+
+        final PeriodicWorkRequest periodicWorkRequest
+                = new PeriodicWorkRequest.Builder(MyWorker.class, 15, TimeUnit.MINUTES)
+                .build();
+        WorkManager.getInstance().enqueue(periodicWorkRequest);
+
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener navListener=new BottomNavigationView.OnNavigationItemSelectedListener() {
