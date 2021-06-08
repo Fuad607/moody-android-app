@@ -1,6 +1,8 @@
 package com.example.moody;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,8 +14,9 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import java.util.ArrayList;
+import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 
 public class Q4Fragment extends Fragment {
     Spinner dropdown;
@@ -36,6 +39,13 @@ public class Q4Fragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_q4, container, false);
 
+        return v;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull @NotNull View v, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        super.onViewCreated(v, savedInstanceState);
+
         dropdown = (Spinner) v.findViewById(R.id.special_situation);
         radioGroup = (RadioGroup) v.findViewById(R.id.radioGroup);
 
@@ -44,9 +54,10 @@ public class Q4Fragment extends Fragment {
                 "Select an answer", "Work/Study", "Family", "Partner", "Health", "Other", "None"
         };
 
-
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, items);
         dropdown.setAdapter(adapter);
+
+
         dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -54,11 +65,9 @@ public class Q4Fragment extends Fragment {
                 //Toast.makeText(parent.getContext(), "Selected: " + position, Toast.LENGTH_LONG).show();
                 RadioButton pos = (RadioButton) v.findViewById(R.id.radioPositive);
                 RadioButton neg = (RadioButton) v.findViewById(R.id.radioNegative);
-                pos.setChecked(false);
-                neg.setChecked(false);
 
                 if (MainActivity.q4.containsKey(selectedItem)) {
-                    String selectitem=MainActivity.q4.get(selectedItem);
+                    String selectitem = MainActivity.q4.get(selectedItem);
                     if (selectitem.equals("Positive")) {
                         System.out.println(MainActivity.q4.get(selectedItem));
                         pos.setChecked(true);
@@ -67,6 +76,9 @@ public class Q4Fragment extends Fragment {
                         pos.setChecked(false);
                         neg.setChecked(true);
                     }
+                }else{
+                    pos.setChecked(false);
+                    neg.setChecked(false);
                 }
             }
 
@@ -77,8 +89,6 @@ public class Q4Fragment extends Fragment {
         });
 
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-
-
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 RadioButton checkedRadioButton = (RadioButton) group.findViewById(checkedId);
@@ -87,21 +97,14 @@ public class Q4Fragment extends Fragment {
                     checkedRadioButton.setChecked(false);
                 } else {
                     boolean isChecked = checkedRadioButton.isChecked();
-                    String selectedRbText = checkedRadioButton.getText().toString();
-                    MainActivity.q4.put(selectedItem, selectedRbText);
+                    if (isChecked) {
+                        String selectedRbText = checkedRadioButton.getText().toString();
+                        MainActivity.q4.put(selectedItem, selectedRbText);
+                    }
                 }
-                System.out.println(MainActivity.q4);
-           /*     int selectedRadioButtonId = radioGroup.getCheckedRadioButtonId();
-                if (selectedRadioButtonId != -1) {
-                    selectedRadioButton = (RadioButton) view.findViewById(selectedRadioButtonId);
-                    System.out.println(selectedRadioButton);
-
-                    selectedRbText = selectedRadioButton.getText().toString();
-                    MainActivity.q4answer = selectedRbText;
-                }*/
             }
         });
 
-        return v;
+
     }
 }

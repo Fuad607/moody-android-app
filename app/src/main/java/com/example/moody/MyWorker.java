@@ -1,7 +1,9 @@
 package com.example.moody;
 
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -24,22 +26,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class MyWorker extends Worker {
-//Userspecialsituation usermeeting survey
-    private static String URL_POST_SURVEY = "http://192.168.0.16/api/survey";
-    private static String URL_POST_USERMEETING = "http://192.168.0.16/api/usermeeting";
-    private static String URL_POST_Userspecialsituation = "http://192.168.0.16/api/userspecialsituation";
-    String USER_ID;
-    DBHelper DB;
-    JSONArray jsonArray;
-    JSONObject jsonObjectUserData;
-    SharedPreferences sharedPreferences;
 
     public MyWorker(Context context, WorkerParameters workerParameters){
         super(context,workerParameters);
     }
     @Override
     public Result doWork() {
-        displayNotification("Hello world","work is finished");
+        displayNotification("How are you now?","Please complete survey!");
+
         return Result.success();
     }
     private void displayNotification(String task,String desc){
@@ -48,56 +42,22 @@ public class MyWorker extends Worker {
             NotificationChannel channel=new NotificationChannel("simplifiedcoding","simplifiedcoding",NotificationManager.IMPORTANCE_DEFAULT);
             manager.createNotificationChannel(channel);
         }
-        Intent rIntent= new Intent(getApplicationContext(),MainActivity.class);
+
+        Intent notificationIntent = new Intent(getApplicationContext(), MenuActivity.class);
+
+        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK| Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 1,
+                notificationIntent, PendingIntent.FLAG_ONE_SHOT);
 
         NotificationCompat.Builder builder =new NotificationCompat.Builder(getApplicationContext(),"simplifiedcoding")
                 .setContentTitle(task)
                 .setContentText(desc)
-                .setSmallIcon(R.mipmap.ic_launcher);
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setContentIntent(pendingIntent);
 
         manager.notify(1, builder.build());
-    }
-
-    private void sync_data(){
-        DB = new DBHelper(getApplicationContext());
-
-        Cursor cursor_user_relationship = DB.getSurvey();
-        cursor_user_relationship.moveToFirst();
-
-        while(cursor_user_relationship.isAfterLast() == false){
-           // array_list.add(cursor_user_relationship.getString(cursor_user_relationship.getColumnIndex("nickname")));
-            //array_list_contacted_user_id.add(cursor_user_relationship.getString(cursor_user_relationship.getColumnIndex("contacted_user_id")));
-            cursor_user_relationship.moveToNext();
-        }
-
-
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_POST_SURVEY ,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            jsonArray = new JSONArray(response);
-
-                            for (int i=0; i<jsonArray.length(); i++) {
-                                JSONObject user_relationship = jsonArray.getJSONObject(i);
-
-                               // DB.insertUserRelationshipData( user_id,user_relationship.getString("nickname"),user_relationship.getString("contacted_user_id"),user_relationship.getString("type"));
-                            }
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                    }
-                });
-        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-        requestQueue.add(stringRequest);
-
-
 
     }
 }
