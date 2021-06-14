@@ -43,8 +43,17 @@ public class LoginActivity extends AppCompatActivity {
     SharedPreferences sharedPreferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+
+        SharedPreferences sharedPreferences = getSharedPreferences("USER_DATA", MODE_PRIVATE);
+        USER_ID = sharedPreferences.getString("USER_ID","");
+        if(!USER_ID.isEmpty()){
+            startActivity(new Intent(LoginActivity.this,MenuActivity.class));
+            finish();
+        }
 
         loading= findViewById(R.id.loading);
         email=findViewById(R.id.email);
@@ -75,7 +84,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
           //change
-                startActivity(new Intent(LoginActivity.this,RegisterActivity.class));
+                startActivity(new Intent(LoginActivity.this,MenuActivity.class));
             }
         });
     }
@@ -178,8 +187,5 @@ public class LoginActivity extends AppCompatActivity {
                 });
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
-
-
-
     }
 }

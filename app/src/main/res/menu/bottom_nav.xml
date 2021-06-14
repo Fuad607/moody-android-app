@@ -2,22 +2,22 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/nav_home"
-        android:color="@color/colorPrimaryDark"
+        android:color="@color/colorPrimaryDark2"
         android:icon="@drawable/ic_baseline_home_24"
         android:title="Home" />
     <item
         android:id="@+id/nav_log"
-        android:color="@color/colorPrimaryDark"
+        android:color="@color/colorPrimaryDark2"
         android:icon="@drawable/ic_baseline_settings_24"
         android:title="Log" />
     <item
         android:id="@+id/nav_history"
-        android:color="@color/colorPrimaryDark"
-        android:icon="@drawable/ic_baseline_history_24"
+        android:color="@color/colorPrimaryDark2"
+        android:icon="@drawable/ic_baseline_timeline_24"
         android:title="History" />
     <item
         android:id="@+id/nav_log_out"
-        android:color="@color/colorPrimaryDark"
+        android:color="@color/colorPrimaryDark2"
         android:icon="@drawable/ic_baseline_login_24"
         android:title="Log Out" />
 </menu>

@@ -6,16 +6,25 @@
     android:layout_height="match_parent"
     tools:context=".Q3Fragment">
 
+    <TextView
+        android:id="@+id/link_regist"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="12dp"
+        android:padding="10dp"
+        android:text="Who have you met in the last hour?"
+        android:textColor="@color/colorText"
+        android:textSize="30sp" />
     <EditText
         android:id="@+id/search_text"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="100dp"
         android:background="@drawable/search_bg"
         android:elevation="6dp"
-        android:hint="Search"
+        android:hint="Search Mood Partners"
         android:inputType="textPersonName"
         android:lineSpacingExtra="10sp"
         android:paddingTop="20dp"
@@ -49,18 +58,16 @@
         app:maxImageSize="35dp"
         app:srcCompat="@drawable/ic_baseline_search_24"
         tools:ignore="VectorDrawableCompat" />-->
-
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="540dp"
+        android:layout_height="match_parent"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="120dp"
+        android:layout_marginTop="170dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
         app:cardCornerRadius="8dp">
-
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_view_user_relationship"
             android:layout_width="match_parent"

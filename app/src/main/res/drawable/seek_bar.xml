@@ -3,7 +3,7 @@
         <shape
             android:shape="line">
             <stroke
-                android:color="@color/colorPrimary"
+                android:color="@color/colorPrimary2"
                 android:width="@dimen/seek_bar_thickness"/>
         </shape>
     </item>
@@ -12,7 +12,7 @@
             <shape
                 android:shape="line">
                 <stroke
-                    android:color="@color/colorPrimary"
+                    android:color="@color/colorPrimary2"
                     android:width="@dimen/seek_bar_thickness"/>
             </shape>
         </clip>
@@ -23,7 +23,7 @@
             <shape
                 android:shape="line">
                 <stroke
-                    android:color="@color/colorPrimary"
+                    android:color="@color/colorPrimary2"
                     android:width="@dimen/seek_bar_thickness"/>
             </shape>
         </clip>

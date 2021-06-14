@@ -11,8 +11,10 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import com.example.moody.ui.main.SectionsPagerAdapter;
 import com.example.moody.databinding.ActivityMainBinding;
@@ -42,22 +44,31 @@ public class MainActivity extends AppCompatActivity {
         ViewPager viewPager = binding.viewPager;
         viewPager.setAdapter(sectionsPagerAdapter);
         TabLayout tabs = binding.tabs;
-        System.out.println(viewPager);
+
         tabs.setupWithViewPager(viewPager);
-        FloatingActionButton next_button = binding.surveyNext;
-        FloatingActionButton prev_button = binding.surveyPrev;
+        Button next_button = binding.surveyNext;
+        Button prev_button = binding.surveyPrev;
         FloatingActionButton finish_survey = binding.finishSurvey;
+
+        DB = new DBHelper(MainActivity.this);
+
         if (viewPager.getCurrentItem() == 0) {
-            prev_button.hide();
+            // prev_button.hide();
+            prev_button.setVisibility(View.INVISIBLE);
         }
         SharedPreferences sharedPreferences = getSharedPreferences("USER_DATA", MODE_PRIVATE);
         USER_ID = sharedPreferences.getString("USER_ID", "");
+        TextView textTab = binding.tabText;
 
         next_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                prev_button.show();
+                //  prev_button.show();
+                prev_button.setVisibility(View.VISIBLE);
                 int current_page = viewPager.getCurrentItem();
+                int page = current_page + 2;
+
+                textTab.setText("Question " + page + "/4");
                 if (current_page < 3) {
                     viewPager.setCurrentItem(current_page + 1);
                 } else if (current_page == 3) {
@@ -65,16 +76,20 @@ public class MainActivity extends AppCompatActivity {
                     //Toast.makeText( special_situation.getText(), "Selected: " , Toast.LENGTH_LONG).show();
                     // find the radiobutton by returned id#
 
-                    Log.d("output", q1range + ", " + q2range + ", " + q3.toString() + ", " + q4question + ", " + q4answer+", "+q4);
-                    DB = new DBHelper(MainActivity.this);
+                    Log.d("output", q1range + ", " + q2range + ", " + q3.toString() +", " + q4);
+
                     Long survey_id = DB.insertSurvey(USER_ID, q1range, q2range);
 
-                    for (Map.Entry<String,String> entry : q3.entrySet())
-                        DB.insertUserMeeting( survey_id.toString(), entry.getKey(),  entry.getValue());
+                    for (Map.Entry<String, String> entry : q3.entrySet())
+                        DB.insertUserMeeting(survey_id.toString(), entry.getKey(), entry.getValue());
 
-                    for (Map.Entry<String,String> entry : q4.entrySet())
-                        DB.insertUserSpecialSituation( survey_id.toString(), entry.getKey(),  entry.getValue());
+                    for (Map.Entry<String, String> entry : q4.entrySet())
+                        DB.insertUserSpecialSituation(survey_id.toString(), entry.getKey(), entry.getValue());
 
+                    q1range = 5;
+                    q2range = 5;
+                    q3 = new HashMap<>();
+                    q4 = new HashMap<String, String>();
                     startActivity(new Intent(MainActivity.this, MenuActivity.class));
                     finish();
                 }
@@ -87,7 +102,8 @@ public class MainActivity extends AppCompatActivity {
                 int current_page = viewPager.getCurrentItem();
                 viewPager.setCurrentItem(current_page - 1);
                 if (current_page == 1) {
-                    prev_button.hide();
+                    //  prev_button.hide();
+                    prev_button.setVisibility(View.INVISIBLE);
                 }
             }
         });

@@ -21,7 +21,7 @@ import java.util.Observer;
 import java.util.concurrent.TimeUnit;
 
 public class MenuActivity extends AppCompatActivity {
-    SharedPreferences sharedpreferences;
+    SharedPreferences sharedPreferences;
     String USER_ID;
 
     @Override
@@ -29,8 +29,12 @@ public class MenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
-        SharedPreferences sharedPreferences = getSharedPreferences("USER_DATA", MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences("USER_DATA", MODE_PRIVATE);
         USER_ID = sharedPreferences.getString("USER_ID","");
+
+        if(USER_ID.isEmpty()){
+            startActivity(new Intent(MenuActivity.this,LoginActivity.class));;
+        }
 
         BottomNavigationView bottom_nav =findViewById(R.id.bottom_nav);
         bottom_nav.setOnNavigationItemSelectedListener(navListener);
@@ -45,6 +49,10 @@ public class MenuActivity extends AppCompatActivity {
                 .build();
         WorkManager.getInstance().enqueue(periodicWorkRequest);
 
+       /* final PeriodicWorkRequest periodicSyncRequest
+                = new PeriodicWorkRequest.Builder(SyncWorker.class, 15, TimeUnit.MINUTES)
+                .build();
+        WorkManager.getInstance().enqueue(periodicSyncRequest);*/
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener navListener=new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -55,20 +63,30 @@ public class MenuActivity extends AppCompatActivity {
             switch (menuItem.getItemId()){
                 case R.id.nav_home:
                     selectedFragment= new HomeFragment();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,selectedFragment).commit();
                     break;
                 case R.id.nav_history:
                     selectedFragment= new HistoryFragment();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,selectedFragment).commit();
                     break;
                 case R.id.nav_log:
                     selectedFragment= new LogFragment();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,selectedFragment).commit();
                     break;
                 case R.id.nav_log_out:
-                    startActivity(new Intent(MenuActivity.this,LoginActivity.class));;
-                    finish();
+                    sharedPreferences = getSharedPreferences("USER_DATA", MODE_PRIVATE);
+                    SharedPreferences.Editor editor=sharedPreferences.edit();
+                    editor.putString("USER_ID","");
+                    if (editor.commit()) {
+                        startActivity(new Intent(MenuActivity.this,LoginActivity.class));;
+                        finish();
+                    }
+
+
                     break;
             }
 
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,selectedFragment).commit();
+
 
             return true;
         }

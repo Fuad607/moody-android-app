@@ -44,7 +44,7 @@
     </ProgressBar>
     <Button
         android:id="@+id/btn_login"
-        android:backgroundTint="@color/colorPrimary"
+        android:backgroundTint="@color/colorPrimary2"
         android:textColor="@android:color/white"
         android:text="Login"
         android:layout_marginTop="40dp"
@@ -60,6 +60,6 @@
         android:gravity="center"
         android:layout_marginTop="40dp"
         android:text="Register"
-        android:textColor="@color/colorPrimary" />
+        android:textColor="@color/colorPrimary2" />
 
 </LinearLayout>

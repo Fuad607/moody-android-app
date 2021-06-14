@@ -153,6 +153,23 @@ public class DBHelper extends SQLiteOpenHelper {
         DB.execSQL("delete from  Survey");
     }
 
+    public Boolean setSyncSurvey(String survey_id) {
+        SQLiteDatabase DB = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("sync", 1);
+        Cursor cursor = DB.rawQuery("Select * from Survey where id=?", new String[]{survey_id});
+        if (cursor.getCount() > 0) {
+            long result = DB.update("Survey", contentValues, "id=?", new String[]{survey_id});
+            if (result == -1) {
+                return false;
+            } else {
+                return true;
+            }
+        } else {
+            return false;
+        }
+    }
+
     //UserMeeting data
     public Long insertUserMeeting(String survey_id, String contacted_user_id, String meeting_type) {
         SQLiteDatabase DB = this.getWritableDatabase();
