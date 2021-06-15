@@ -41,22 +41,25 @@ public class SyncWorker extends Worker {
 
     @Override
     public Result doWork() {
-       //  sync_data();
+         sync_data();
          return Result.success();
     }
 
     private void sync_data() {
+        System.out.println("sync strart");
         DB = new DBHelper(getApplicationContext());
 
         Cursor cursor_survey = DB.getSurvey();
         cursor_survey.moveToFirst();
 
-         if(cursor_survey.moveToFirst()) {
-
-            while (cursor_survey.isAfterLast() == false) {
+        while (cursor_survey.isAfterLast() == false) {
 
                 System.out.println( cursor_survey.getString(cursor_survey.getColumnIndex("user_id")));
                 db_survey_id = cursor_survey.getString(cursor_survey.getColumnIndex("id"));
+
+            System.out.println(db_survey_id);
+            DB.setSyncSurvey(db_survey_id);
+            System.out.println("database sync");
 
                 Map<String, String> params = new HashMap<>();
                 params.put("user_id", cursor_survey.getString(cursor_survey.getColumnIndex("user_id")));
@@ -64,7 +67,7 @@ public class SyncWorker extends Worker {
                 params.put("relaxed_level", cursor_survey.getString(cursor_survey.getColumnIndex("relaxed_level")));
                 params.put("sync", "1");
 
-                StringRequest stringRequestSurvey = new StringRequest(Request.Method.POST, URL_POST_SURVEY,
+ /*               StringRequest stringRequestSurvey = new StringRequest(Request.Method.POST, URL_POST_SURVEY,
                         new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
@@ -131,19 +134,18 @@ public class SyncWorker extends Worker {
 
                         return params;
                     }
-                  /*  public Map<String, String> getHeaders() throws AuthFailureError {
+                    public Map<String, String> getHeaders() throws AuthFailureError {
                         Map<String,String> params = new HashMap<String, String>();
                         params.put("Content-Type","application/x-www-form-urlencoded");
                         return params;
-                    }*/
+                    }
                 };
 
                 RequestQueue requestQueueSurvey = Volley.newRequestQueue(getApplicationContext());
                 requestQueueSurvey.add(stringRequestSurvey);
 
-
+*/
                 cursor_survey.moveToNext();
             }
-        }
     }
 }

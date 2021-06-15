@@ -9,6 +9,9 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
+import androidx.work.Constraints;
+import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.NetworkType;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkInfo;
@@ -32,27 +35,48 @@ public class MenuActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("USER_DATA", MODE_PRIVATE);
         USER_ID = sharedPreferences.getString("USER_ID","");
 
-        if(USER_ID.isEmpty()){
-            startActivity(new Intent(MenuActivity.this,LoginActivity.class));;
-        }
+//        if(USER_ID.isEmpty()){
+//            startActivity(new Intent(MenuActivity.this,LoginActivity.class));;
+//        }
+        sharedPreferences= getSharedPreferences("USER_DATA", MODE_PRIVATE);
+        SharedPreferences.Editor editor=sharedPreferences.edit();
+        editor.putString("USER_ID","6");
+        editor.apply();
+
+
+        ///////////////////
+
 
         BottomNavigationView bottom_nav =findViewById(R.id.bottom_nav);
         bottom_nav.setOnNavigationItemSelectedListener(navListener);
 
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new HomeFragment()).commit();
 
-        OneTimeWorkRequest request=new OneTimeWorkRequest.Builder(MyWorker.class).build();
-        WorkManager.getInstance().enqueue(request);
+//        OneTimeWorkRequest request=new OneTimeWorkRequest.Builder(MyWorker.class).build();
+//        WorkManager.getInstance().enqueue(request);
 
         final PeriodicWorkRequest periodicWorkRequest
                 = new PeriodicWorkRequest.Builder(MyWorker.class, 15, TimeUnit.MINUTES)
                 .build();
         WorkManager.getInstance().enqueue(periodicWorkRequest);
 
-       /* final PeriodicWorkRequest periodicSyncRequest
-                = new PeriodicWorkRequest.Builder(SyncWorker.class, 15, TimeUnit.MINUTES)
+/*
+        final PeriodicWorkRequest periodicSyncRequest
+                = new PeriodicWorkRequest.Builder(SyncWorker.class, 15, TimeUnit.SECONDS)
                 .build();
-        WorkManager.getInstance().enqueue(periodicSyncRequest);*/
+        WorkManager.getInstance().enqueue(periodicSyncRequest);
+*/
+
+        Constraints constraint = new Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build();
+
+        PeriodicWorkRequest PeriodicWorkRequest = new PeriodicWorkRequest.Builder(SyncWorker.class, 1, TimeUnit.MINUTES)
+                .setConstraints(constraint)
+                .build();
+
+        WorkManager workManager = WorkManager.getInstance();
+        workManager.enqueueUniquePeriodicWork("sync_data", ExistingPeriodicWorkPolicy.KEEP, PeriodicWorkRequest);
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener navListener=new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -91,4 +115,5 @@ public class MenuActivity extends AppCompatActivity {
             return true;
         }
     };
+
 }

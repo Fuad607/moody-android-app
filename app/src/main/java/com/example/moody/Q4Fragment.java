@@ -12,7 +12,10 @@ import android.widget.ArrayAdapter;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.moody.databinding.ActivityMainBinding;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -38,17 +41,14 @@ public class Q4Fragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_q4, container, false);
-
         return v;
     }
 
     @Override
     public void onViewCreated(@NonNull @NotNull View v, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(v, savedInstanceState);
-
         dropdown = (Spinner) v.findViewById(R.id.special_situation);
         radioGroup = (RadioGroup) v.findViewById(R.id.radioGroup);
-
 
         String[] items = new String[]{
                 "Select an answer", "Work/Study", "Family", "Partner", "Health", "Other", "None"
@@ -68,9 +68,8 @@ public class Q4Fragment extends Fragment {
                 if (MainActivity.q4.containsKey(selectedItem)) {
                     String selectitem = MainActivity.q4.get(selectedItem);
                     if (selectitem.equals("Positive")) {
-                        System.out.println(MainActivity.q4.get(selectedItem));
-                        pos.setChecked(true);
-                        neg.setChecked(false);
+                         pos.setChecked(true);
+                         neg.setChecked(false);
                     } else {
                         neg.setChecked(true);
                         pos.setChecked(false);
@@ -84,7 +83,7 @@ public class Q4Fragment extends Fragment {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                // TODO Auto-generated method stub
+
             }
         });
 
@@ -92,11 +91,14 @@ public class Q4Fragment extends Fragment {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 RadioButton checkedRadioButton = (RadioButton) group.findViewById(checkedId);
+
                 String  typ;
+
                 if (selectedItem.equals("Select an answer")) {
                     Toast.makeText(v.getContext(), "Select an item", Toast.LENGTH_LONG).show();
                     checkedRadioButton.setChecked(false);
                 } else {
+
                     String selectedRbText = checkedRadioButton.getText().toString();
                     if(selectedRbText.equals("Positive")){
                         typ="1";

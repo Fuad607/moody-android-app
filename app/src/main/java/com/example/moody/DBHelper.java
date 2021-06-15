@@ -143,7 +143,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public Cursor getSurvey() {
         SQLiteDatabase DB = this.getReadableDatabase();
 
-        Cursor cursor = DB.rawQuery("Select * from Survey where sync=0", null);
+        Cursor cursor = DB.rawQuery("Select * from Survey where sync='0'", null);
 
         return cursor;
     }

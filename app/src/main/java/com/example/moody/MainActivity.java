@@ -60,15 +60,29 @@ public class MainActivity extends AppCompatActivity {
         USER_ID = sharedPreferences.getString("USER_ID", "");
         TextView textTab = binding.tabText;
 
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            public void onPageScrollStateChanged(int state) {
+
+            }
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                int page=position+1;
+
+                textTab.setText("Question "+page+"/4");
+            }
+
+            public void onPageSelected(int position) {
+                // Check if this is the page you want.
+             }
+        });
+
+
         next_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //  prev_button.show();
                 prev_button.setVisibility(View.VISIBLE);
                 int current_page = viewPager.getCurrentItem();
-                int page = current_page + 2;
 
-                textTab.setText("Question " + page + "/4");
                 if (current_page < 3) {
                     viewPager.setCurrentItem(current_page + 1);
                 } else if (current_page == 3) {
@@ -115,10 +129,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Q3Fragment q3RecyclerViewFragment = new Q3Fragment();
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.view_pager, q3RecyclerViewFragment);
-        fragmentTransaction.commit();
+//        Q3Fragment q3RecyclerViewFragment = new Q3Fragment();
+//        FragmentManager fragmentManager = getSupportFragmentManager();
+//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//        fragmentTransaction.add(R.id.view_pager, q3RecyclerViewFragment);
+//        fragmentTransaction.commit();
     }
 }

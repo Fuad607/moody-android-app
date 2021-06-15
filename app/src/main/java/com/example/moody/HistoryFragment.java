@@ -1,6 +1,7 @@
 package com.example.moody;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -26,6 +27,10 @@ import com.jjoe64.graphview.series.Series;
 
 import org.jetbrains.annotations.NotNull;
 import android.content.SharedPreferences;
+import android.widget.DatePicker;
+import android.widget.EditText;
+
+import java.util.Calendar;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -36,6 +41,7 @@ public class HistoryFragment extends Fragment {
     SharedPreferences sharedPreferences;
     DBHelper DB;
     String USER_ID;
+    DatePickerDialog picker;
 
     @Nullable
     @org.jetbrains.annotations.Nullable
@@ -51,6 +57,10 @@ public class HistoryFragment extends Fragment {
 
         Cursor cursor_surve = DB.getSurvey();
         cursor_surve.moveToFirst();
+        point_graph.getViewport().setScrollable(true);
+        point_graph.getViewport().setScrollableY(true);
+        point_graph.getViewport().setScalable(true);
+        point_graph.getViewport().setScalableY(true);
 
         while(cursor_surve.isAfterLast() == false){
 
@@ -68,6 +78,7 @@ public class HistoryFragment extends Fragment {
                 new DataPoint(4, 3800),
                 new DataPoint(5, 3500),
         });
+        point_series.setTitle("Air");
         point_graph.addSeries(point_series);
        // point_series.setShape(PointsGraphSeries.Shape.RECTANGLE);
         point_series.setCustomShape(new PointsGraphSeries.CustomShape() {
@@ -96,7 +107,7 @@ public class HistoryFragment extends Fragment {
 
 
 
-        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+/*        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         final AlertDialog alert = builder.create();
 
         alert.setTitle("Create the program");
@@ -105,7 +116,7 @@ public class HistoryFragment extends Fragment {
             public void onClick(DialogInterface dialog, int which) {
                 alert.dismiss();
             } });
-        alert.show();
+        alert.show();*/
 
 
         point_graph.setOnTouchListener(new View.OnTouchListener(){
@@ -127,6 +138,36 @@ public class HistoryFragment extends Fragment {
             }
 
         });
+
+        EditText fromDate=v.findViewById(R.id.fromDate);
+        fromDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Calendar cldr = Calendar.getInstance();
+                int day = cldr.get(Calendar.DAY_OF_MONTH);
+                int month = cldr.get(Calendar.MONTH);
+                int year = cldr.get(Calendar.YEAR);
+                // date picker dialog
+                picker = new DatePickerDialog(getContext(),
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                fromDate.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
+                            }
+                        }, year, month, day);
+                picker.show();
+            }
+        });
+
+      /*  btnGet=(Button)findViewById(R.id.button1);
+        btnGet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tvw.setText("Selected Date: "+ eText.getText());
+            }
+        });*/
+
+
         return v;
     }
 }
