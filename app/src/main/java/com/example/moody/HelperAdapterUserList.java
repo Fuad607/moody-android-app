@@ -40,7 +40,7 @@ public class HelperAdapterUserList extends RecyclerView.Adapter {
         viewHolderClass.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // Toast.makeText(context, "test", Toast.LENGTH_LONG).show();
+                // Toast.makeText(context, "test", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -48,76 +48,16 @@ public class HelperAdapterUserList extends RecyclerView.Adapter {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    viewHolderClass.m1.setVisibility(View.VISIBLE);
-                    viewHolderClass.m2.setVisibility(View.VISIBLE);
-                    viewHolderClass.m3.setVisibility(View.VISIBLE);
-                    MainActivity.q3.put(contactedUserId.get(viewHolderClass.getAdapterPosition()), "");
+                    // viewHolderClass.m1.setVisibility(View.VISIBLE);
+
+                    //MainActivity.q3.put(contactedUserId.get(viewHolderClass.getAdapterPosition()), "");
                 } else {
-                    MainActivity.q3.remove(contactedUserId.get(viewHolderClass.getAdapterPosition()));
-                    viewHolderClass.m1.setVisibility(View.INVISIBLE);
-                    viewHolderClass.m2.setVisibility(View.INVISIBLE);
-                    viewHolderClass.m3.setVisibility(View.INVISIBLE);
+                    // MainActivity.q3.remove(contactedUserId.get(viewHolderClass.getAdapterPosition()));
+                    // viewHolderClass.m1.setVisibility(View.INVISIBLE);
+
                 }
             }
         });
-
-        viewHolderClass.m1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (viewHolderClass.m1.getTag().equals(0)) {
-                    viewHolderClass.m1.setBackgroundResource(R.color.button_selected);
-                    // viewHolderClass.m1.setBackgroundColor(Color.parseColor("#3700B3"));
-                    viewHolderClass.m1.setTag(1);
-                    if (MainActivity.q3.containsKey(contactedUserId.get(viewHolderClass.getAdapterPosition()))) {
-                        MainActivity.q3.put(contactedUserId.get(viewHolderClass.getAdapterPosition()), viewHolderClass.m1.getText().toString());
-                    }
-                    viewHolderClass.m2.setBackgroundResource(R.color.button_unselected);
-                    viewHolderClass.m3.setBackgroundResource(R.color.button_unselected);
-                } else {
-                    viewHolderClass.m1.setTag(0);
-                    viewHolderClass.m1.setBackgroundResource(R.color.button_unselected);
-                }
-            }
-        });
-
-        viewHolderClass.m2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (viewHolderClass.m2.getTag().equals(0)) {
-                    viewHolderClass.m2.setBackgroundResource(R.color.button_selected);
-                    // viewHolderClass.m2.setBackgroundColor(Color.parseColor("#3700B3"));
-                    viewHolderClass.m2.setTag(1);
-                    if (MainActivity.q3.containsKey(contactedUserId.get(viewHolderClass.getAdapterPosition()))) {
-                        MainActivity.q3.put(contactedUserId.get(viewHolderClass.getAdapterPosition()), viewHolderClass.m2.getText().toString());
-                    }
-                    viewHolderClass.m1.setBackgroundResource(R.color.button_unselected);
-                    viewHolderClass.m3.setBackgroundResource(R.color.button_unselected);
-                } else {
-                    viewHolderClass.m2.setTag(0);
-                    viewHolderClass.m2.setBackgroundResource(R.color.button_unselected);
-                }
-            }
-        });
-
-        viewHolderClass.m3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (viewHolderClass.m3.getTag().equals(0)) {
-                    viewHolderClass.m3.setBackgroundResource(R.color.button_selected);
-                    // viewHolderClass.m3.setBackgroundColor(Color.parseColor("#3700B3"));
-                    viewHolderClass.m3.setTag(1);
-                    if (MainActivity.q3.containsKey(contactedUserId.get(viewHolderClass.getAdapterPosition()))) {
-                        MainActivity.q3.put(contactedUserId.get(viewHolderClass.getAdapterPosition()), viewHolderClass.m3.getText().toString());
-                    }
-                    viewHolderClass.m1.setBackgroundResource(R.color.button_unselected);
-                    viewHolderClass.m2.setBackgroundResource(R.color.button_unselected);
-                } else {
-                    viewHolderClass.m3.setTag(0);
-                    viewHolderClass.m3.setBackgroundResource(R.color.button_unselected);
-                }
-            }
-        });
-
 
     }
 
@@ -129,18 +69,12 @@ public class HelperAdapterUserList extends RecyclerView.Adapter {
     public class ViewHolderClass extends RecyclerView.ViewHolder {
         TextView textView;
         CheckBox checkBox_select;
-        Button m1, m2, m3;
 
         public ViewHolderClass(@NonNull @NotNull View itemView) {
             super(itemView);
-            textView = (TextView) itemView.findViewById(R.id.tv_user_name);
-            checkBox_select = (CheckBox) itemView.findViewById(R.id.checkBox_select);
-            m1 = (Button) itemView.findViewById(R.id.metting_type_1);
-            m2 = (Button) itemView.findViewById(R.id.metting_type_2);
-            m3 = (Button) itemView.findViewById(R.id.metting_type_3);
-            m1.setTag(0);
-            m2.setTag(0);
-            m3.setTag(0);
+            textView = (TextView) itemView.findViewById(R.id.user_name_history);
+            checkBox_select = (CheckBox) itemView.findViewById(R.id.checkbox_select_history);
+
         }
     }
 }

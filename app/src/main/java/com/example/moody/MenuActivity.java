@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 
 import androidx.work.Constraints;
@@ -17,6 +18,10 @@ import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
 
+import com.google.android.gms.nearby.Nearby;
+import com.google.android.gms.nearby.messages.Message;
+import com.google.android.gms.nearby.messages.MessageListener;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Observable;
@@ -26,6 +31,8 @@ import java.util.concurrent.TimeUnit;
 public class MenuActivity extends AppCompatActivity {
     SharedPreferences sharedPreferences;
     String USER_ID;
+    MessageListener   mMessageListener;
+    Message  mMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,17 +42,9 @@ public class MenuActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("USER_DATA", MODE_PRIVATE);
         USER_ID = sharedPreferences.getString("USER_ID","");
 
-//        if(USER_ID.isEmpty()){
-//            startActivity(new Intent(MenuActivity.this,LoginActivity.class));;
-//        }
-        sharedPreferences= getSharedPreferences("USER_DATA", MODE_PRIVATE);
-        SharedPreferences.Editor editor=sharedPreferences.edit();
-        editor.putString("USER_ID","6");
-        editor.apply();
-
-
-        ///////////////////
-
+        if(USER_ID.isEmpty()){
+            startActivity(new Intent(MenuActivity.this,LoginActivity.class));;
+        }
 
         BottomNavigationView bottom_nav =findViewById(R.id.bottom_nav);
         bottom_nav.setOnNavigationItemSelectedListener(navListener);
@@ -55,28 +54,36 @@ public class MenuActivity extends AppCompatActivity {
 //        OneTimeWorkRequest request=new OneTimeWorkRequest.Builder(MyWorker.class).build();
 //        WorkManager.getInstance().enqueue(request);
 
-        final PeriodicWorkRequest periodicWorkRequest
-                = new PeriodicWorkRequest.Builder(MyWorker.class, 15, TimeUnit.MINUTES)
-                .build();
-        WorkManager.getInstance().enqueue(periodicWorkRequest);
-
-/*
         final PeriodicWorkRequest periodicSyncRequest
-                = new PeriodicWorkRequest.Builder(SyncWorker.class, 15, TimeUnit.SECONDS)
+                = new PeriodicWorkRequest.Builder(SyncWorker.class, 15, TimeUnit.MINUTES)
                 .build();
         WorkManager.getInstance().enqueue(periodicSyncRequest);
-*/
 
-        Constraints constraint = new Constraints.Builder()
-                .setRequiredNetworkType(NetworkType.CONNECTED)
+
+        final PeriodicWorkRequest periodicWorkRequest
+                = new PeriodicWorkRequest.Builder(MyWorker.class, 1, TimeUnit.MINUTES)
+                .setConstraints(new Constraints.Builder().setRequiresCharging(true).build())
                 .build();
 
-        PeriodicWorkRequest PeriodicWorkRequest = new PeriodicWorkRequest.Builder(SyncWorker.class, 1, TimeUnit.MINUTES)
-                .setConstraints(constraint)
-                .build();
+        WorkManager.getInstance().enqueueUniquePeriodicWork(
+                "sync_data",
+                ExistingPeriodicWorkPolicy.KEEP,
+                periodicWorkRequest);
 
-        WorkManager workManager = WorkManager.getInstance();
-        workManager.enqueueUniquePeriodicWork("sync_data", ExistingPeriodicWorkPolicy.KEEP, PeriodicWorkRequest);
+
+            mMessageListener = new MessageListener() {
+            @Override
+            public void onFound(Message message) {
+                Log.d("mes", "Found message: " + new String(message.getContent()));
+            }
+
+            @Override
+            public void onLost(Message message) {
+                Log.d("mes", "Lost sight of message: " + new String(message.getContent()));
+            }
+        };
+
+           mMessage = new Message("Hello World".getBytes());
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener navListener=new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -102,18 +109,31 @@ public class MenuActivity extends AppCompatActivity {
                     SharedPreferences.Editor editor=sharedPreferences.edit();
                     editor.putString("USER_ID","");
                     if (editor.commit()) {
-                        startActivity(new Intent(MenuActivity.this,LoginActivity.class));;
+                        startActivity(new Intent(MenuActivity.this,LoginActivity.class));
+                        WorkManager.getInstance().cancelAllWork();
                         finish();
                     }
-
 
                     break;
             }
 
-
-
             return true;
         }
     };
+    public void onStart() {
+        super.onStart();
+
+        Nearby.getMessagesClient(this).publish(mMessage);
+        Nearby.getMessagesClient(this).subscribe(mMessageListener);
+    }
+
+    @Override
+    public void onStop() {
+        Nearby.getMessagesClient(this).unpublish(mMessage);
+        Nearby.getMessagesClient(this).unsubscribe(mMessageListener);
+
+        super.onStop();
+    }
+
 
 }

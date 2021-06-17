@@ -56,28 +56,39 @@ public class Q4Fragment extends Fragment {
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, items);
         dropdown.setAdapter(adapter);
+        RadioButton pos = (RadioButton) v.findViewById(R.id.radioPositive);
+        RadioButton neg = (RadioButton) v.findViewById(R.id.radioNegative);
+
+
 
         dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 selectedItem = (String) parent.getItemAtPosition(position).toString();
                 //Toast.makeText(parent.getContext(), "Selected: " + position, Toast.LENGTH_LONG).show();
-                RadioButton pos = (RadioButton) v.findViewById(R.id.radioPositive);
-                RadioButton neg = (RadioButton) v.findViewById(R.id.radioNegative);
 
-                if (MainActivity.q4.containsKey(selectedItem)) {
-                    String selectitem = MainActivity.q4.get(selectedItem);
-                    if (selectitem.equals("Positive")) {
-                         pos.setChecked(true);
-                         neg.setChecked(false);
-                    } else {
-                        neg.setChecked(true);
-                        pos.setChecked(false);
+                if (selectedItem.equals("Select an answer")) {
+                    pos.setVisibility(View.INVISIBLE);
+                    neg.setVisibility(View.INVISIBLE);
+                    Toast.makeText(v.getContext(), "Select an item", Toast.LENGTH_LONG).show();
 
-                    }
                 }else{
-                    pos.setChecked(false);
-                    neg.setChecked(false);
+                    pos.setVisibility(View.VISIBLE);
+                    neg.setVisibility(View.VISIBLE);
+
+                    if (MainActivity.q4.containsKey(selectedItem)) {
+                        String selectitem = MainActivity.q4.get(selectedItem);
+                        if (selectitem.equals("Positive")) {
+                            pos.setChecked(true);
+                            neg.setChecked(false);
+                        } else {
+                            neg.setChecked(true);
+                            pos.setChecked(false);
+                        }
+                    }else{
+                        neg.setChecked(false);
+                        pos.setChecked(false);
+                    }
                 }
             }
 
@@ -98,7 +109,6 @@ public class Q4Fragment extends Fragment {
                     Toast.makeText(v.getContext(), "Select an item", Toast.LENGTH_LONG).show();
                     checkedRadioButton.setChecked(false);
                 } else {
-
                     String selectedRbText = checkedRadioButton.getText().toString();
                     if(selectedRbText.equals("Positive")){
                         typ="1";
@@ -109,7 +119,5 @@ public class Q4Fragment extends Fragment {
                 }
             }
         });
-
-
     }
 }

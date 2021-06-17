@@ -45,7 +45,7 @@ public class HelperAdapter extends RecyclerView.Adapter {
         viewHolderClass.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // Toast.makeText(context, "test", Toast.LENGTH_LONG).show();
+                // Toast.makeText(context, "test", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -74,13 +74,17 @@ public class HelperAdapter extends RecyclerView.Adapter {
                     // viewHolderClass.m1.setBackgroundColor(Color.parseColor("#3700B3"));
                     viewHolderClass.m1.setTag(1);
                     if (MainActivity.q3.containsKey(contactedUserId.get(viewHolderClass.getAdapterPosition()))) {
-                        MainActivity.q3.put(contactedUserId.get(viewHolderClass.getAdapterPosition()), viewHolderClass.m1.getText().toString());
+                        // MainActivity.q3.put(contactedUserId.get(viewHolderClass.getAdapterPosition()), viewHolderClass.m1.getText().toString());
+                        MainActivity.q3.put(contactedUserId.get(viewHolderClass.getAdapterPosition()), "1");
                     }
                     viewHolderClass.m2.setBackgroundResource(R.color.button_unselected);
                     viewHolderClass.m3.setBackgroundResource(R.color.button_unselected);
                 } else {
                     viewHolderClass.m1.setTag(0);
                     viewHolderClass.m1.setBackgroundResource(R.color.button_unselected);
+                    if (MainActivity.q3.containsKey(contactedUserId.get(viewHolderClass.getAdapterPosition()))) {
+                        MainActivity.q3.put(contactedUserId.get(viewHolderClass.getAdapterPosition()), "0");
+                    }
                 }
             }
         });
@@ -93,13 +97,16 @@ public class HelperAdapter extends RecyclerView.Adapter {
                     // viewHolderClass.m2.setBackgroundColor(Color.parseColor("#3700B3"));
                     viewHolderClass.m2.setTag(1);
                     if (MainActivity.q3.containsKey(contactedUserId.get(viewHolderClass.getAdapterPosition()))) {
-                        MainActivity.q3.put(contactedUserId.get(viewHolderClass.getAdapterPosition()), viewHolderClass.m2.getText().toString());
+                        MainActivity.q3.put(contactedUserId.get(viewHolderClass.getAdapterPosition()), "2");
                     }
                     viewHolderClass.m1.setBackgroundResource(R.color.button_unselected);
                     viewHolderClass.m3.setBackgroundResource(R.color.button_unselected);
                 } else {
                     viewHolderClass.m2.setTag(0);
                     viewHolderClass.m2.setBackgroundResource(R.color.button_unselected);
+                    if (MainActivity.q3.containsKey(contactedUserId.get(viewHolderClass.getAdapterPosition()))) {
+                        MainActivity.q3.put(contactedUserId.get(viewHolderClass.getAdapterPosition()), "0");
+                    }
                 }
             }
         });
@@ -112,18 +119,19 @@ public class HelperAdapter extends RecyclerView.Adapter {
                     // viewHolderClass.m3.setBackgroundColor(Color.parseColor("#3700B3"));
                     viewHolderClass.m3.setTag(1);
                     if (MainActivity.q3.containsKey(contactedUserId.get(viewHolderClass.getAdapterPosition()))) {
-                        MainActivity.q3.put(contactedUserId.get(viewHolderClass.getAdapterPosition()), viewHolderClass.m3.getText().toString());
+                        MainActivity.q3.put(contactedUserId.get(viewHolderClass.getAdapterPosition()),"3");
                     }
                     viewHolderClass.m1.setBackgroundResource(R.color.button_unselected);
                     viewHolderClass.m2.setBackgroundResource(R.color.button_unselected);
                 } else {
                     viewHolderClass.m3.setTag(0);
                     viewHolderClass.m3.setBackgroundResource(R.color.button_unselected);
+                    if (MainActivity.q3.containsKey(contactedUserId.get(viewHolderClass.getAdapterPosition()))) {
+                        MainActivity.q3.put(contactedUserId.get(viewHolderClass.getAdapterPosition()), "0");
+                    }
                 }
             }
         });
-
-
     }
 
     @Override
