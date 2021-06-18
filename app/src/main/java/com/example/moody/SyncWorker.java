@@ -1,12 +1,7 @@
 package com.example.moody;
 
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.os.Build;
-import android.support.v4.app.NotificationCompat;
 
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;

@@ -2,7 +2,7 @@ package com.example.moody;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
@@ -26,8 +26,7 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
+
 public class LoginActivity extends AppCompatActivity {
 
     private EditText email,password;

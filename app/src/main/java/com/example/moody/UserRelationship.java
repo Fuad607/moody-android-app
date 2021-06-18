@@ -1,8 +1,7 @@
 package com.example.moody;
 
 import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class UserRelationship  extends AppCompatActivity {
 

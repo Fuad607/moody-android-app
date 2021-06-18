@@ -11,7 +11,7 @@
     android:paddingTop="200dp"
     tools:context=".LoginActivity">
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <EditText
@@ -21,8 +21,8 @@
             android:textColor="@color/colorText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
-    </android.support.design.widget.TextInputLayout>
-    <android.support.design.widget.TextInputLayout
+    </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:passwordToggleEnabled="true">
@@ -33,7 +33,7 @@
             android:textColor="@color/colorText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
     <ProgressBar
         android:id="@+id/loading"

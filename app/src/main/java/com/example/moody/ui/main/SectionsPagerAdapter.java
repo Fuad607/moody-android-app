@@ -1,22 +1,17 @@
 package com.example.moody.ui.main;
 
-import android.app.Activity;
 import android.content.Context;
-import android.support.annotation.Nullable;
-import android.support.annotation.StringRes;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.text.Html;
-import android.widget.TextView;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
 
-import com.example.moody.MainActivity;
 import com.example.moody.Q1Fragment;
 import com.example.moody.Q2Fragment;
 import com.example.moody.Q3Fragment;
 import com.example.moody.Q4Fragment;
 import com.example.moody.R;
-import com.example.moody.databinding.ActivityMainBinding;
 
 /**
  * A [FragmentPagerAdapter] that returns a fragment corresponding to
