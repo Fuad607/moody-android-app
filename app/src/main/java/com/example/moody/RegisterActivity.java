@@ -27,7 +27,7 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText nickname, email, password,c_password;
     private Button btn_regist;
     private ProgressBar loading;
-    private static String URL_REGIST="http://192.168.0.16/api/users";
+    private static String URL_REGIST="http://192.168.0.203/api/users";
     DBHelper DB;
     public static final String  SHARED_PREFS="sharedPrefs";
     public static final String  TEXT="text";

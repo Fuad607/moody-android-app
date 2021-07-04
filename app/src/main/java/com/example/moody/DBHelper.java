@@ -120,7 +120,7 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     //Survey data
-    public Long insertSurvey(String user_id, Integer mood_level, Integer relaxed_level) {
+    public Long insertSurvey(String user_id, Integer mood_level, Integer relaxed_level, Integer sync) {
         SQLiteDatabase DB = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
 
@@ -132,7 +132,7 @@ public class DBHelper extends SQLiteOpenHelper {
         contentValues.put("relaxed_level", relaxed_level);
         contentValues.put("timestamp", ts);
         contentValues.put("deleted", 0);
-        contentValues.put("sync", 0);
+        contentValues.put("sync", sync);
         long result = DB.insert("Survey", null, contentValues);
 
         return result;

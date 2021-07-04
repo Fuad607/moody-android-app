@@ -33,12 +33,15 @@ public class LoginActivity extends AppCompatActivity {
     private Button btn_login;
     private TextView link_regist;
     private ProgressBar loading;
-    private static String URL_USER_RELATIONSHIP = "http://192.168.0.16/api/userrelationship/getallbyid/";
+    private static String URL_USER_RELATIONSHIP = "http://192.168.0.203/api/userrelationship/getallbyid/";
+    private static String URL_SURVEY = "http://192.168.0.203/api/survey/";
+    private static String URL_USER_MEETING = "http://192.168.0.203/api/usermeeting/";
+    private static String URL_USER_SPECIALSITUATION = "http://192.168.0.203/api/userspecialsituation/";
     String USER_ID;
     DBHelper DB;
     JSONArray jsonArray;
     JSONObject jsonObjectUserData;
-    private  static  String URL_LOGIN="http://192.168.0.16/api/users/checkUser";
+    private  static  String URL_LOGIN="http://192.168.0.203/api/users/checkUser";
     SharedPreferences sharedPreferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +86,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
           //change
-                startActivity(new Intent(LoginActivity.this,MenuActivity.class));
+                startActivity(new Intent(LoginActivity.this,RegisterActivity.class));
             }
         });
     }
@@ -186,5 +189,85 @@ public class LoginActivity extends AppCompatActivity {
                 });
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
+
+        StringRequest stringSurvey = new StringRequest(Request.Method.GET, URL_SURVEY+ user_id,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONArray jsonArrayApi = new JSONArray(response);
+
+                            for (int i=0; i<jsonArrayApi.length(); i++) {
+                                JSONObject api_survey_result = jsonArrayApi.getJSONObject(i);
+
+                                Long db_survey_id = DB.insertSurvey( user_id,api_survey_result.getInt("mood_level"),api_survey_result.getInt("relaxed_level"),api_survey_result.getInt("sync"));
+
+                                StringRequest stringUserMeeting = new StringRequest(Request.Method.GET, URL_USER_MEETING + api_survey_result.getInt("id"),
+                                        new Response.Listener<String>() {
+                                            @Override
+                                            public void onResponse(String response) {
+                                                try {
+                                                    jsonArray = new JSONArray(response);
+
+                                                    for (int i=0; i<jsonArray.length(); i++) {
+                                                        JSONObject user_meeting = jsonArray.getJSONObject(i);
+
+                                                        DB.insertUserMeeting(db_survey_id.toString(),user_meeting.getString("contacted_user_id"),user_meeting.getString("meeting_type"));
+                                                    }
+
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                        },
+                                        new Response.ErrorListener() {
+                                            @Override
+                                            public void onErrorResponse(VolleyError error) {
+                                            }
+                                        });
+                                RequestQueue requestMeeting= Volley.newRequestQueue(getApplicationContext());
+                                requestMeeting.add(stringUserMeeting);
+
+
+                                StringRequest stringUserSpecialSituation = new StringRequest(Request.Method.GET, URL_USER_SPECIALSITUATION + api_survey_result.getInt("id"),
+                                        new Response.Listener<String>() {
+                                            @Override
+                                            public void onResponse(String response) {
+                                                try {
+                                                    jsonArray = new JSONArray(response);
+
+                                                    for (int i=0; i<jsonArray.length(); i++) {
+                                                        JSONObject user_special_situation = jsonArray.getJSONObject(i);
+
+                                                        DB.insertUserSpecialSituation(db_survey_id.toString(),user_special_situation.getString("special_situation"),user_special_situation.getString("special_situation_type"));
+                                                    }
+
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                        },
+                                        new Response.ErrorListener() {
+                                            @Override
+                                            public void onErrorResponse(VolleyError error) {
+                                            }
+                                        });
+                                RequestQueue requestUserSpecialSituation= Volley.newRequestQueue(getApplicationContext());
+                                requestUserSpecialSituation.add(stringUserSpecialSituation);
+
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                    }
+                });
+        RequestQueue requestSurvey= Volley.newRequestQueue(this);
+        requestSurvey.add(stringSurvey);
     }
 }

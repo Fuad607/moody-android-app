@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
 
                     Log.d("output", q1range + ", " + q2range + ", " + q3.toString() +", " + q4);
 
-                    Long survey_id = DB.insertSurvey(USER_ID, q1range, q2range);
+                    Long survey_id = DB.insertSurvey(USER_ID, q1range, q2range,0);
 
                     for (Map.Entry<String, String> entry : q3.entrySet())
                         DB.insertUserMeeting(survey_id.toString(), entry.getKey(), entry.getValue());

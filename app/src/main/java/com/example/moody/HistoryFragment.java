@@ -61,28 +61,27 @@ public class HistoryFragment extends Fragment {
 
         DB=new DBHelper(getContext());
 
-        Cursor cursor_surve = DB.getSurvey();
-        cursor_surve.moveToFirst();
+
+        //if no internet
+        Cursor cursor_survey = DB.getSurvey();
+        cursor_survey.moveToFirst();
         point_graph.getViewport().setScrollable(true);
         point_graph.getViewport().setScrollableY(true);
         point_graph.getViewport().setScalable(true);
         point_graph.getViewport().setScalableY(true);
 
-        while(cursor_surve.isAfterLast() == false){
+        while(cursor_survey.isAfterLast() == false){
 
-            cursor_surve.moveToNext();
+            cursor_survey.moveToNext();
         }
 
+
+        //api call get all users whcih user have relationship
+        
         PointsGraphSeries<DataPoint> point_series = new PointsGraphSeries<DataPoint>(new DataPoint[]{
                 new DataPoint(0, 20),
                 new DataPoint(1, 25),
-                new DataPoint(2, 27),
-                new DataPoint(3, 30),
-                new DataPoint(4, 3),
-                new DataPoint(5, 28),
-                new DataPoint(3, 37),
-                new DataPoint(4, 38),
-                new DataPoint(5, 35),
+            
         });
         point_series.setTitle("Air");
 
