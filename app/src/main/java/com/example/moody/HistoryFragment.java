@@ -67,10 +67,10 @@ public class HistoryFragment extends Fragment {
     DatePickerDialog picker;
     RecyclerView recyclerView;
     ArrayList name;
-    JSONArray  jsonArray;
+    JSONArray jsonArray;
     EditText searchText;
     private static String URL = "http://192.168.0.203/api/";
-    String[] date_list=new String[7];
+    String[] date_list = new String[7];
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Nullable
@@ -81,12 +81,12 @@ public class HistoryFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_history, container, false);
 
         LocalDate current = LocalDate.now();
-        LocalDate startdate= current.minusDays(6);
+        LocalDate startdate = current.minusDays(6);
 
         for (int i = 0; i < 7; i++) {
-           // date_list += "'" + current + "',";
-            int date=startdate.getDayOfMonth();
-            date_list[i]=String.valueOf(date);
+            // date_list += "'" + current + "',";
+            int date = startdate.getDayOfMonth();
+            date_list[i] = String.valueOf(date);
 
             startdate = startdate.plusDays(1);
         }
@@ -101,17 +101,17 @@ public class HistoryFragment extends Fragment {
     public void onViewCreated(@NonNull @NotNull View v, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
 
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, URL+"/survey/" + USER_ID,
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, URL + "/survey/" + USER_ID,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         try {
-                              jsonArray = new JSONArray(response);
+                            jsonArray = new JSONArray(response);
 
-                            for (int i=0; i<jsonArray.length(); i++) {
+                            for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject user_relationship = jsonArray.getJSONObject(i);
 
-                             }
+                            }
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -158,6 +158,45 @@ public class HistoryFragment extends Fragment {
 
         });
 
+
+        /*
+        * {
+"result": {
+"3": {
+"nickname": "John",
+"mood_data": "0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0",
+"relaxed_data": "0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0"
+},
+"4": {
+"nickname": "ddd",
+"mood_data": "0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0",
+"relaxed_data": "0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0"
+}
+},
+"label_date": " '20.Nov.2021',  '21.Nov.2021',  '22.Nov.2021',  '23.Nov.2021',  '24.Nov.2021',  '25.Nov.2021',  '26.Nov.2021',  '27.Nov.2021',  '28.Nov.2021',  '29.Nov.2021',  '30.Nov.2021',  '01.Dec.2021',  '02.Dec.2021',  '03.Dec.2021',  '04.Dec.2021',  '05.Dec.2021',  '06.Dec.2021',  '07.Dec.2021',  '08.Dec.2021',  '09.Dec.2021',  '10.Dec.2021',  '11.Dec.2021',  '12.Dec.2021' "
+* */
+
+
+
+
+        /*
+        * {
+"result": {
+"3": {
+"nickname": "John",
+"mood_data": "0, 0, 0, 0, 0",
+"relaxed_data": "0, 0, 0, 0, 0"
+},
+"4": {
+"nickname": "ddd",
+"mood_data": "0, 0, 0, 0, 0",
+"relaxed_data": "0, 0, 0, 0, 0"
+}
+},
+"label_date": " '20.Dec.2021',  '21.Dec.2021',  '22.Dec.2021',  '23.Dec.2021',  '24.Dec.2021'"
+}*/
+
+//
 //        for (int i = 0; i < 10; i++) {
 //
 //        }
