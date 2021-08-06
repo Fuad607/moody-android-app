@@ -5,13 +5,18 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import org.jetbrains.annotations.NotNull;
+
 
 public class HomeFragment  extends Fragment {
 
@@ -30,8 +35,22 @@ public class HomeFragment  extends Fragment {
                 startActivity(intent);
             }
         });
+
+        TextView link_log=(TextView) v.findViewById(R.id.link_log);
+        link_log.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //change
+                AppCompatActivity activity = (AppCompatActivity) view.getContext();
+                Fragment logFragment = new LogFragment();
+                activity.getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, logFragment).addToBackStack(null).commit();
+            }
+        });
+
+
         return v;
     }
+
 
 
 }

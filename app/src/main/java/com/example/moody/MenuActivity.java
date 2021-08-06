@@ -9,6 +9,8 @@ import androidx.fragment.app.Fragment;
 import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.work.Constraints;
 import androidx.work.ExistingPeriodicWorkPolicy;
@@ -40,6 +42,7 @@ public class MenuActivity extends AppCompatActivity {
         if(USER_ID.isEmpty()){
             startActivity(new Intent(MenuActivity.this,LoginActivity.class));;
         }
+
 
         BottomNavigationView bottom_nav =findViewById(R.id.bottom_nav);
         bottom_nav.setOnNavigationItemSelectedListener(navListener);
@@ -78,7 +81,7 @@ public class MenuActivity extends AppCompatActivity {
             }
         };
 
-           mMessage = new Message("Hello World".getBytes());
+           mMessage = new Message("".getBytes());
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener navListener=new BottomNavigationView.OnNavigationItemSelectedListener() {

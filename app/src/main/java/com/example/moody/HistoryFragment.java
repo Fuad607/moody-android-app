@@ -7,17 +7,27 @@ import android.database.Cursor;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.os.Build;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.helper.StaticLabelsFormatter;
 import com.jjoe64.graphview.series.DataPoint;
@@ -27,13 +37,23 @@ import com.jjoe64.graphview.series.PointsGraphSeries;
 import com.jjoe64.graphview.series.Series;
 
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.YearMonth;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -47,20 +67,74 @@ public class HistoryFragment extends Fragment {
     DatePickerDialog picker;
     RecyclerView recyclerView;
     ArrayList name;
+    JSONArray  jsonArray;
     EditText searchText;
+    private static String URL = "http://192.168.0.203/api/";
+    String[] date_list=new String[7];
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Nullable
     @org.jetbrains.annotations.Nullable
     @Override
+
     public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable @org.jetbrains.annotations.Nullable ViewGroup container, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        View v= inflater.inflate(R.layout.fragment_history,container,false);
-        point_graph=(GraphView)v.findViewById(R.id.scatterPlot);
+        View v = inflater.inflate(R.layout.fragment_history, container, false);
 
-        sharedPreferences =this.getActivity().getSharedPreferences("USER_DATA", MODE_PRIVATE);
-        USER_ID = sharedPreferences.getString("USER_ID","");
+        LocalDate current = LocalDate.now();
+        LocalDate startdate= current.minusDays(6);
 
-        DB=new DBHelper(getContext());
+        for (int i = 0; i < 7; i++) {
+           // date_list += "'" + current + "',";
+            int date=startdate.getDayOfMonth();
+            date_list[i]=String.valueOf(date);
 
+            startdate = startdate.plusDays(1);
+        }
+
+        sharedPreferences = this.getActivity().getSharedPreferences("USER_DATA", Context.MODE_PRIVATE);
+        USER_ID = sharedPreferences.getString("USER_ID", "");
+
+        return v;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull @NotNull View v, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, URL+"/survey/" + USER_ID,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                              jsonArray = new JSONArray(response);
+
+                            for (int i=0; i<jsonArray.length(); i++) {
+                                JSONObject user_relationship = jsonArray.getJSONObject(i);
+
+                             }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                    }
+                });
+        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
+        requestQueue.add(stringRequest);
+
+
+        super.onViewCreated(v, savedInstanceState);
+
+        point_graph = (GraphView) v.findViewById(R.id.scatterPlot);
+
+        sharedPreferences = this.getActivity().getSharedPreferences("USER_DATA", MODE_PRIVATE);
+        USER_ID = sharedPreferences.getString("USER_ID", "");
+
+        DB = new DBHelper(getContext());
 
         //if no internet
         Cursor cursor_survey = DB.getSurvey();
@@ -70,20 +144,24 @@ public class HistoryFragment extends Fragment {
         point_graph.getViewport().setScalable(true);
         point_graph.getViewport().setScalableY(true);
 
-        while(cursor_survey.isAfterLast() == false){
+        while (cursor_survey.isAfterLast() == false) {
 
             cursor_survey.moveToNext();
         }
 
-
         //api call get all users whcih user have relationship
-        
+
         PointsGraphSeries<DataPoint> point_series = new PointsGraphSeries<DataPoint>(new DataPoint[]{
+
                 new DataPoint(0, 20),
                 new DataPoint(1, 25),
-            
+
         });
-        point_series.setTitle("Air");
+
+//        for (int i = 0; i < 10; i++) {
+//
+//        }
+//        point_series.appendData();
 
 
         point_graph.addSeries(point_series);
@@ -106,7 +184,9 @@ public class HistoryFragment extends Fragment {
         point_series.setSize(18);
 
         StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(point_graph);
-        staticLabelsFormatter.setHorizontalLabels(new String[]{"Mon", "Tue", "Wed", "Thu", "Fr", "Sat", "Sun"});
+
+        staticLabelsFormatter.setHorizontalLabels(date_list);
+
         point_graph.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
   /*      point_series.setOnDataPointTapListener(new OnDataPointTapListener() {
             @Override
@@ -118,8 +198,8 @@ public class HistoryFragment extends Fragment {
         point_series.setOnDataPointTapListener(new OnDataPointTapListener() {
             @Override
             public void onTap(Series series, DataPointInterface dataPoint) {
-                String msg="X:"+dataPoint.getX()+"\nY:"+dataPoint.getX();
-                Toast.makeText(getActivity(),msg,Toast.LENGTH_LONG).show();
+                String msg = "X:" + dataPoint.getX() + "\nY:" + dataPoint.getX();
+                Toast.makeText(getActivity(), msg, Toast.LENGTH_LONG).show();
                 System.out.println("asdadas");
 
             }
@@ -158,7 +238,7 @@ public class HistoryFragment extends Fragment {
 
         });*/
 
-        EditText fromDate=v.findViewById(R.id.fromDate);
+        EditText fromDate = v.findViewById(R.id.fromDate);
 
         fromDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -199,12 +279,12 @@ public class HistoryFragment extends Fragment {
         ArrayList<String> array_list_contacted_user_id = new ArrayList<String>();
         ArrayList<String> array_list_contacted_user_id_filtered = new ArrayList<String>();
 
-        DB=new DBHelper(getContext());
+        DB = new DBHelper(getContext());
 
         Cursor cursor_user_relationship = DB.getUserRelationshipData(USER_ID);
         cursor_user_relationship.moveToFirst();
 
-        while(cursor_user_relationship.isAfterLast() == false){
+        while (cursor_user_relationship.isAfterLast() == false) {
             array_list.add(cursor_user_relationship.getString(cursor_user_relationship.getColumnIndex("nickname")));
             array_list_contacted_user_id.add(cursor_user_relationship.getString(cursor_user_relationship.getColumnIndex("contacted_user_id")));
             cursor_user_relationship.moveToNext();
@@ -246,6 +326,5 @@ public class HistoryFragment extends Fragment {
         });
 
 */
-        return v;
     }
 }
