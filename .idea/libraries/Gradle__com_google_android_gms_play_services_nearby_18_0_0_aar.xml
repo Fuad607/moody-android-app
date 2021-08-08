@@ -5,8 +5,9 @@
       <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/c5f43d83c90e8d394f9706c2140736d3/play-services-nearby-18.0.0/res" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/c5f43d83c90e8d394f9706c2140736d3/play-services-nearby-18.0.0/AndroidManifest.xml" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/c5f43d83c90e8d394f9706c2140736d3/jetified-play-services-nearby-18.0.0/res" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/c5f43d83c90e8d394f9706c2140736d3/jetified-play-services-nearby-18.0.0/AndroidManifest.xml" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/c5f43d83c90e8d394f9706c2140736d3/jetified-play-services-nearby-18.0.0/jars/classes.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/aed9cff2df5b00d0d86ff7f9ff38e717/jetified-play-services-nearby-18.0.0/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/aed9cff2df5b00d0d86ff7f9ff38e717/jetified-play-services-nearby-18.0.0/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/aed9cff2df5b00d0d86ff7f9ff38e717/jetified-play-services-nearby-18.0.0/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.android.gms/play-services-nearby/18.0.0/ee14906f3e61da09619f990ebaa6c29c5f624fac/play-services-nearby-18.0.0-javadoc.jar!/" />

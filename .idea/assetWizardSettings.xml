@@ -23,7 +23,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio1/plugins/android/lib/android.jar!/images/material/icons/materialicons/timeline/baseline_timeline_24.xml" />
+                                      <entry key="url" value="jar:file:/Applications/Android%20Studio.app/Contents/plugins/android/lib/android.jar!/images/material/icons/materialicons/help/baseline_help_24.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -34,8 +34,8 @@
                         <option name="values">
                           <map>
                             <entry key="color" value="0078d4" />
-                            <entry key="outputName" value="ic_baseline_timeline_24" />
-                            <entry key="sourceFile" value="C:\Users\Fuad\AndroidStudioProjects\Downloads\grimacing-face-svgrepo-com.svg" />
+                            <entry key="outputName" value="ic_baseline_help_35" />
+                            <entry key="sourceFile" value="/C:\Users\Fuad\AndroidStudioProjects\Downloads\grimacing-face-svgrepo-com.svg" />
                           </map>
                         </option>
                       </PersistentState>
