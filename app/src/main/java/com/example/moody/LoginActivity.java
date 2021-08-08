@@ -33,15 +33,15 @@ public class LoginActivity extends AppCompatActivity {
     private Button btn_login;
     private TextView link_regist;
     private ProgressBar loading;
-    private static String URL_USER_RELATIONSHIP = "http://collectivemoodtracker.herokuapp.com/api/userrelationship/getallbyid/";
-    private static String URL_SURVEY = "http://collectivemoodtracker.herokuapp.com/api/survey/";
-    private static String URL_USER_MEETING = "http://collectivemoodtracker.herokuapp.com/api/usermeeting/";
-    private static String URL_USER_SPECIALSITUATION = "http://collectivemoodtracker.herokuapp.com/api/userspecialsituation/";
+    private static String URL_USER_RELATIONSHIP = "https://collectivemoodtracker.herokuapp.com/api/userrelationship/getallbyid/";
+    private static String URL_SURVEY = "https://collectivemoodtracker.herokuapp.com/api/survey/";
+    private static String URL_USER_MEETING = "https://collectivemoodtracker.herokuapp.com/api/usermeeting/";
+    private static String URL_USER_SPECIALSITUATION = "https://collectivemoodtracker.herokuapp.com/api/userspecialsituation/";
     String USER_ID;
     DBHelper DB;
     JSONArray jsonArray;
     JSONObject jsonObjectUserData;
-    private  static  String URL_LOGIN="http://collectivemoodtracker.herokuapp.com/api/users/checkUser";
+    private  static  String URL_LOGIN="https://collectivemoodtracker.herokuapp.com/api/users/checkUser";
     SharedPreferences sharedPreferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
