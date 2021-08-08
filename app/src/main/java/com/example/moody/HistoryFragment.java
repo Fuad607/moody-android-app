@@ -69,7 +69,7 @@ public class HistoryFragment extends Fragment {
     ArrayList name;
     JSONArray jsonArray;
     EditText searchText;
-    private static String URL = "http://192.168.0.203/api/";
+    private static String URL = "http://collectivemoodtracker.herokuapp.com/api/";
     String[] date_list = new String[7];
 
     @RequiresApi(api = Build.VERSION_CODES.O)

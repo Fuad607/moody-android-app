@@ -23,9 +23,9 @@ import java.util.Map;
 
 public class SyncWorker extends Worker {
     //Userspecialsituation usermeeting survey
-    private static String URL_POST_SURVEY = "http://192.168.0.203/api/survey";
-    private static String URL_POST_USERMEETING = "http://192.168.0.203/api/usermeeting";
-    private static String URL_POST_Userspecialsituation = "http://192.168.0.203/api/userspecialsituation";
+    private static String URL_POST_SURVEY = "https://collectivemoodtracker.herokuapp.com/api/survey";
+    private static String URL_POST_USERMEETING = "https://collectivemoodtracker.herokuapp.com/api/usermeeting";
+    private static String URL_POST_Userspecialsituation = "https://collectivemoodtracker.herokuapp.com/api/userspecialsituation";
     String USER_ID, db_survey_id, api_survey_id;
 
     JSONArray jsonArray;
