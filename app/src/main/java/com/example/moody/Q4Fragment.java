@@ -57,7 +57,6 @@ public class Q4Fragment extends Fragment {
         RadioButton neg = (RadioButton) v.findViewById(R.id.radioNegative);
 
 
-
         dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -67,7 +66,7 @@ public class Q4Fragment extends Fragment {
                 if (selectedItem.equals("Select an answer")) {
                     pos.setVisibility(View.INVISIBLE);
                     neg.setVisibility(View.INVISIBLE);
-                    Toast.makeText(v.getContext(), "Select an item", Toast.LENGTH_LONG).show();
+                   // Toast.makeText(v.getContext(), "Select an item", Toast.LENGTH_LONG).show();
 
                 }else{
                     pos.setVisibility(View.VISIBLE);

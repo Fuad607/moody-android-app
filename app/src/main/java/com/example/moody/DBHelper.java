@@ -120,12 +120,9 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     //Survey data
-    public Long insertSurvey(String user_id, Integer mood_level, Integer relaxed_level, Integer sync) {
+    public Long insertSurvey(String user_id, Integer mood_level, Integer relaxed_level, Integer sync, String ts) {
         SQLiteDatabase DB = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-
-        Long tsLong = System.currentTimeMillis() / 1000;
-        String ts = tsLong.toString();
 
         contentValues.put("user_id", user_id);
         contentValues.put("mood_level", mood_level);
@@ -142,6 +139,15 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase DB = this.getReadableDatabase();
 
         Cursor cursor = DB.rawQuery("Select * from Survey where sync='0'", null);
+
+        return cursor;
+    }
+
+    public Cursor getAllSurvey() {
+        SQLiteDatabase DB = this.getReadableDatabase();
+
+        Cursor cursor = DB.rawQuery("Select user_id,timestamp as ts, mood_level-5 as mood_level,relaxed_level-5 as relaxed_level" +
+                " from Survey where deleted='0' Order by timestamp ", null);
 
         return cursor;
     }

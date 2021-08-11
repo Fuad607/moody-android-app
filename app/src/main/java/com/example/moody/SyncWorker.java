@@ -62,6 +62,7 @@ public class SyncWorker extends Worker {
             params.put("user_id", cursor_survey.getString(cursor_survey.getColumnIndex("user_id")));
             params.put("mood_level", cursor_survey.getString(cursor_survey.getColumnIndex("mood_level")));
             params.put("relaxed_level", cursor_survey.getString(cursor_survey.getColumnIndex("relaxed_level")));
+            params.put("timestamp", cursor_survey.getString(cursor_survey.getColumnIndex("timestamp")));
             params.put("sync", "1");
 
             StringRequest stringRequestSurvey = new StringRequest(Request.Method.POST, URL_POST_SURVEY,
@@ -75,7 +76,7 @@ public class SyncWorker extends Worker {
                                 System.out.println(jsonSurveyData);
                                 api_survey_id = jsonSurveyData.getString("id");
                                 System.out.println(api_survey_id);
-                                System.out.println("api geldi");
+
                                 DB.setSyncSurvey(db_survey_id);
 
                                 Cursor cursor_user_special_situation = DB.getUserSpecialSituation(db_survey_id);

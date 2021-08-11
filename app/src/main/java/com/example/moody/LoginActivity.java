@@ -200,7 +200,7 @@ public class LoginActivity extends AppCompatActivity {
                             for (int i=0; i<jsonArrayApi.length(); i++) {
                                 JSONObject api_survey_result = jsonArrayApi.getJSONObject(i);
 
-                                Long db_survey_id = DB.insertSurvey( user_id,api_survey_result.getInt("mood_level"),api_survey_result.getInt("relaxed_level"),api_survey_result.getInt("sync"));
+                                Long db_survey_id = DB.insertSurvey( user_id,api_survey_result.getInt("mood_level"),api_survey_result.getInt("relaxed_level"),api_survey_result.getInt("sync"), String.valueOf(api_survey_result.getInt("timestamp")));
 
                                 StringRequest stringUserMeeting = new StringRequest(Request.Method.GET, URL_USER_MEETING + api_survey_result.getInt("id"),
                                         new Response.Listener<String>() {

@@ -88,8 +88,10 @@ public class MainActivity extends AppCompatActivity {
                     // find the radiobutton by returned id#
 
                     Log.d("output", q1range + ", " + q2range + ", " + q3.toString() +", " + q4);
+                    Long tsLong = System.currentTimeMillis() / 1000;
+                    String ts = tsLong.toString();
 
-                    Long survey_id = DB.insertSurvey(USER_ID, q1range, q2range,0);
+                    Long survey_id = DB.insertSurvey(USER_ID, q1range, q2range,0,ts);
 
                     for (Map.Entry<String, String> entry : q3.entrySet())
                         DB.insertUserMeeting(survey_id.toString(), entry.getKey(), entry.getValue());

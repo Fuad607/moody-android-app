@@ -13,16 +13,24 @@ import android.widget.TextView;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class HelperAdapterUserList extends RecyclerView.Adapter {
 
     Context context;
     ArrayList<String> arrayList, contactedUserId;
+    private RvClickListener clickListener;
+    public List<String> checkedFriends = new ArrayList<>();
 
     public HelperAdapterUserList(Context context, ArrayList<String> arrayList, ArrayList<String> contacted_user_id) {
         this.context = context;
         this.arrayList = arrayList;
         this.contactedUserId = contacted_user_id;
+    }
+
+    public void setClickListener(RvClickListener clickListener) {
+        this.clickListener = clickListener;
     }
 
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
@@ -36,11 +44,15 @@ public class HelperAdapterUserList extends RecyclerView.Adapter {
         ViewHolderClass viewHolderClass = (ViewHolderClass) viewHolder;
         viewHolderClass.textView.setText(arrayList.get(position));
 
-        viewHolderClass.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Toast.makeText(context, "test", Toast.LENGTH_LONG).show();
-            }
+        viewHolderClass.itemView.setOnClickListener(v -> {
+            // Toast.makeText(context, "test", Toast.LENGTH_LONG).show();
+            ((ViewHolderClass) viewHolder).checkBox_select.setChecked(setChecked(contactedUserId.get(position)));
+            String commaseparatedlist = checkedFriends.toString();
+            commaseparatedlist
+                    = commaseparatedlist.replace("[", "")
+                    .replace("]", "")
+                    .replace(" ", "");
+            clickListener.onClick(commaseparatedlist);
         });
 
         viewHolderClass.checkBox_select.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -73,7 +85,16 @@ public class HelperAdapterUserList extends RecyclerView.Adapter {
             super(itemView);
             textView = (TextView) itemView.findViewById(R.id.user_name_history);
             checkBox_select = (CheckBox) itemView.findViewById(R.id.checkbox_select_history);
+        }
+    }
 
+    private boolean setChecked(String id) {
+        if (checkedFriends.contains(id)) {
+            checkedFriends.remove(id);
+            return false;
+        } else {
+            checkedFriends.add(id);
+            return true;
         }
     }
 }

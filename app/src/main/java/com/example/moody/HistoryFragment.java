@@ -1,5 +1,6 @@
 package com.example.moody;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -14,6 +15,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -28,6 +31,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.moody.model.Result;
+import com.example.moody.model.SurveyResponse;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.helper.StaticLabelsFormatter;
 import com.jjoe64.graphview.series.DataPoint;
@@ -57,7 +62,7 @@ import java.util.List;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class HistoryFragment extends Fragment {
+public class HistoryFragment extends Fragment implements RvClickListener {
 
     PointsGraphSeries<DataPoint> xyValues;
     GraphView point_graph;
@@ -70,7 +75,11 @@ public class HistoryFragment extends Fragment {
     JSONArray jsonArray;
     EditText searchText;
     private static String URL = "https://collectivemoodtracker.herokuapp.com/api/";
-    String[] date_list = new String[7];
+
+    private boolean isFromDateSet = false;
+    private boolean isToDateSet = false;
+    EditText fromDate, toDate;
+    private MutableLiveData<SurveyResponse> responseLiveData = new MutableLiveData<>();
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Nullable
@@ -80,60 +89,19 @@ public class HistoryFragment extends Fragment {
     public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable @org.jetbrains.annotations.Nullable ViewGroup container, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_history, container, false);
 
-        LocalDate current = LocalDate.now();
-        LocalDate startdate = current.minusDays(6);
-
-        for (int i = 0; i < 7; i++) {
-            // date_list += "'" + current + "',";
-            int date = startdate.getDayOfMonth();
-            date_list[i] = String.valueOf(date);
-
-            startdate = startdate.plusDays(1);
-        }
-
         sharedPreferences = this.getActivity().getSharedPreferences("USER_DATA", Context.MODE_PRIVATE);
         USER_ID = sharedPreferences.getString("USER_ID", "");
 
         return v;
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onViewCreated(@NonNull @NotNull View v, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-
-
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, URL + "/survey/" + USER_ID,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            jsonArray = new JSONArray(response);
-
-                            for (int i = 0; i < jsonArray.length(); i++) {
-                                JSONObject user_relationship = jsonArray.getJSONObject(i);
-
-                            }
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                    }
-                });
-        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
-        requestQueue.add(stringRequest);
-
-
         super.onViewCreated(v, savedInstanceState);
-
-        point_graph = (GraphView) v.findViewById(R.id.scatterPlot);
-
+        point_graph = v.findViewById(R.id.scatterPlot);
         sharedPreferences = this.getActivity().getSharedPreferences("USER_DATA", MODE_PRIVATE);
         USER_ID = sharedPreferences.getString("USER_ID", "");
-
         DB = new DBHelper(getContext());
 
         //if no internet
@@ -145,170 +113,40 @@ public class HistoryFragment extends Fragment {
         point_graph.getViewport().setScalableY(true);
 
         while (cursor_survey.isAfterLast() == false) {
-
             cursor_survey.moveToNext();
         }
 
-        //api call get all users whcih user have relationship
-
-        PointsGraphSeries<DataPoint> point_series = new PointsGraphSeries<DataPoint>(new DataPoint[]{
-
-                new DataPoint(0, 20),
-                new DataPoint(1, 25),
-
+        fromDate = v.findViewById(R.id.fromDate);
+        fromDate.setOnClickListener(v1 -> {
+            final Calendar cldr = Calendar.getInstance();
+            int day = cldr.get(Calendar.DAY_OF_MONTH);
+            int month = cldr.get(Calendar.MONTH);
+            int year = cldr.get(Calendar.YEAR);
+            // date picker dialog
+            picker = new DatePickerDialog(getContext(),
+                    (view, year1, monthOfYear, dayOfMonth) -> {
+                        fromDate.setText(dayOfMonth + "." + (monthOfYear + 1) + "." + year1);
+                        isFromDateSet = true;
+                    }, year, month, day);
+            picker.show();
         });
 
-
-        /*
-        * {
-"result": {
-"3": {
-"nickname": "John",
-"mood_data": "0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0",
-"relaxed_data": "0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0"
-},
-"4": {
-"nickname": "ddd",
-"mood_data": "0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0",
-"relaxed_data": "0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0"
-}
-},
-"label_date": " '20.Nov.2021',  '21.Nov.2021',  '22.Nov.2021',  '23.Nov.2021',  '24.Nov.2021',  '25.Nov.2021',  '26.Nov.2021',  '27.Nov.2021',  '28.Nov.2021',  '29.Nov.2021',  '30.Nov.2021',  '01.Dec.2021',  '02.Dec.2021',  '03.Dec.2021',  '04.Dec.2021',  '05.Dec.2021',  '06.Dec.2021',  '07.Dec.2021',  '08.Dec.2021',  '09.Dec.2021',  '10.Dec.2021',  '11.Dec.2021',  '12.Dec.2021' "
-* */
-
-
-
-
-        /*
-        * {
-"result": {
-"3": {
-"nickname": "John",
-"mood_data": "0, 0, 0, 0, 0",
-"relaxed_data": "0, 0, 0, 0, 0"
-},
-"4": {
-"nickname": "ddd",
-"mood_data": "0, 0, 0, 0, 0",
-"relaxed_data": "0, 0, 0, 0, 0"
-}
-},
-"label_date": " '20.Dec.2021',  '21.Dec.2021',  '22.Dec.2021',  '23.Dec.2021',  '24.Dec.2021'"
-}*/
-
-//
-//        for (int i = 0; i < 10; i++) {
-//
-//        }
-//        point_series.appendData();
-
-
-        point_graph.addSeries(point_series);
-        // point_series.setShape(PointsGraphSeries.Shape.RECTANGLE);
-        point_series.setCustomShape(new PointsGraphSeries.CustomShape() {
-            @Override
-            public void draw(Canvas canvas, Paint paint, float x, float y, DataPointInterface dataPoint) {
-                paint.setStrokeWidth(10);
-                paint.setStyle(Paint.Style.STROKE);
-                canvas.drawCircle(x, y, 40, paint);
-                canvas.drawText(String.valueOf(dataPoint.getY()), x, y, paint);
-
-               /* canvas.drawLine(x, y, x+40, y , paint);
-                canvas.drawLine(x+40, y, x + 40, y+40, paint);
-                canvas.drawLine(x + 40, y+40, x, y + 40, paint);
-                canvas.drawLine(x, y+40, x, y, paint);*/
-            }
+        toDate = v.findViewById(R.id.toDate);
+        toDate.setOnClickListener(v1 -> {
+            final Calendar cldr = Calendar.getInstance();
+            int day = cldr.get(Calendar.DAY_OF_MONTH);
+            int month = cldr.get(Calendar.MONTH);
+            int year = cldr.get(Calendar.YEAR);
+            // date picker dialog
+            picker = new DatePickerDialog(getContext(),
+                    (view, year1, monthOfYear, dayOfMonth) -> {
+                        toDate.setText(dayOfMonth + "." + (monthOfYear + 1) + "." + year1);
+                        isToDateSet = true;
+                        fetchData(fromDate.getText().toString(), toDate.getText().toString(), "&quot;&quot;");
+                    }, year, month, day);
+            picker.show();
         });
-        point_series.setColor(Color.GREEN);
-        point_series.setSize(18);
-
-        StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(point_graph);
-
-        staticLabelsFormatter.setHorizontalLabels(date_list);
-
-        point_graph.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
-  /*      point_series.setOnDataPointTapListener(new OnDataPointTapListener() {
-            @Override
-            public void onTap(Series series, DataPointInterface dataPoint) {
-            }
-        });*/
-
-
-        point_series.setOnDataPointTapListener(new OnDataPointTapListener() {
-            @Override
-            public void onTap(Series series, DataPointInterface dataPoint) {
-                String msg = "X:" + dataPoint.getX() + "\nY:" + dataPoint.getX();
-                Toast.makeText(getActivity(), msg, Toast.LENGTH_LONG).show();
-                System.out.println("asdadas");
-
-            }
-        });
-
-
-/*        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        final AlertDialog alert = builder.create();
-
-        alert.setTitle("Create the program");
-        alert.setView(v);
-        builder.setNegativeButton("Close", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                alert.dismiss();
-            } });
-        alert.show();*/
-
-
-     /*   point_graph.setOnTouchListener(new View.OnTouchListener(){
-            public boolean onTouch(View v, MotionEvent event) {
-                if(event.getAction() == MotionEvent.ACTION_DOWN) {
-                     float screenX = event.getX();
-                    float screenY = event.getY();
-                    float width_x = v.getWidth();
-                    float viewX = screenX - v.getLeft();
-                    float viewY = screenY - v.getTop();
-                    float percent_x = (viewX/width_x);
-
-
-                    System.out.println("X: " + viewX + " Y: " + viewY +" Percent = " +percent_x);
-
-                    return true;
-                }
-                return false;
-            }
-
-        });*/
-
-        EditText fromDate = v.findViewById(R.id.fromDate);
-
-        fromDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final Calendar cldr = Calendar.getInstance();
-                int day = cldr.get(Calendar.DAY_OF_MONTH);
-                int month = cldr.get(Calendar.MONTH);
-                int year = cldr.get(Calendar.YEAR);
-                // date picker dialog
-                picker = new DatePickerDialog(getContext(),
-                        new DatePickerDialog.OnDateSetListener() {
-                            @Override
-                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                                fromDate.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
-                            }
-                        }, year, month, day);
-                picker.show();
-            }
-        });
-
-      /*  btnGet=(Button)findViewById(R.id.button1);
-        btnGet.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                tvw.setText("Selected Date: "+ eText.getText());
-            }
-        });*/
-
-
-        recyclerView = (RecyclerView) v.findViewById(R.id.user_name_history_recyclerview);
-        //  searchText= (EditText) v.findViewById(R.id.search_text);
+        recyclerView = v.findViewById(R.id.user_name_history_recyclerview);
 
         sharedPreferences = this.getActivity().getSharedPreferences("USER_DATA", Context.MODE_PRIVATE);
         USER_ID = sharedPreferences.getString("USER_ID", "");
@@ -329,41 +167,137 @@ public class HistoryFragment extends Fragment {
             cursor_user_relationship.moveToNext();
         }
 
-        final HelperAdapterUserList[] helperAdapter = {new HelperAdapterUserList(getContext(), array_list, array_list_contacted_user_id)};
+        HelperAdapterUserList helperAdapter = new HelperAdapterUserList(getContext(), array_list, array_list_contacted_user_id);
+        helperAdapter.setClickListener(this);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.setAdapter(helperAdapter[0]);
+        recyclerView.setAdapter(helperAdapter);
+        responseLiveData.observe(getViewLifecycleOwner(), this::drawGraph);
 
-     /*   searchText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+    }
 
+    private void drawGraph(SurveyResponse response) {
+        point_graph.removeAllSeries();
+        //api call get all users which user have relationship
+
+        // ----- burda arrayOfDataPoints e DataPointleri elave ele ozu,
+        // datapointin x, y i ne olmalidi onu yaz,
+        // mood data, relaxed data hansini gostermey isteyirsen onlari filterle add ele ancaq
+        List<DataPoint> arrayOfDataPoints = new ArrayList<>();
+        for (int i = 0; i < response.getResult().size(); i++) {
+            for (int j = 0; j < response.getResult().get(i).getMoodData().size(); j++) {
+                arrayOfDataPoints.add(new DataPoint(i, response.getResult().get(i).getMoodData().get(j)));
             }
+        }
+        // -----
+
+        DataPoint[] arr = new DataPoint[arrayOfDataPoints.size()];
+        for (int i = 0; i < arrayOfDataPoints.size(); i++) {
+            arr[i] = arrayOfDataPoints.get(i);
+        }
+        PointsGraphSeries<DataPoint> point_series = new PointsGraphSeries<>(arr);
+
+        point_graph.addSeries(point_series);
+        // point_series.setShape(PointsGraphSeries.Shape.RECTANGLE);
+        point_series.setCustomShape(new PointsGraphSeries.CustomShape() {
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-            @Override
-            public void afterTextChanged(Editable s) {
-                array_list_filtered.clear();
-                array_list_contacted_user_id_filtered.clear();
-
-                //  if (s.toString().isEmpty())
-                //   helperAdapter[0] = new HelperAdapter(getContext(), array_list, array_list_contacted_user_id);
-
-                for (int i = 0; i < array_list.size(); i++) {
-                    if (array_list.get(i).contains(s.toString())) {
-                        array_list_filtered.add(array_list.get(i));
-                        array_list_contacted_user_id_filtered.add(array_list_contacted_user_id.get(i));
+            public void draw(Canvas canvas, Paint paint, float x, float y, DataPointInterface dataPoint) {
+                int index = arrayOfDataPoints.indexOf(dataPoint);
+                if (index != -1) {
+                    if (index % 2 == 0) {
+                        paint.setStrokeWidth(10);
+                        paint.setStyle(Paint.Style.STROKE);
+                        canvas.drawCircle(x, y, 40, paint);
+                        canvas.drawText(String.valueOf(dataPoint.getY()), x, y, paint);
+                    } else {
+                        paint.setColor(Color.BLUE);
+                        canvas.drawLine(x, y, x + 40, y, paint);
+                        canvas.drawLine(x + 40, y, x + 40, y + 40, paint);
+                        canvas.drawLine(x + 40, y + 40, x, y + 40, paint);
+                        canvas.drawLine(x, y + 40, x, y, paint);
                     }
                 }
-                helperAdapter[0] = new HelperAdapterUserList(getContext(), array_list_filtered, array_list_contacted_user_id_filtered);
-                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-                recyclerView.setLayoutManager(linearLayoutManager);
-                recyclerView.setAdapter(helperAdapter[0]);
             }
         });
 
-*/
+        point_series.setColor(Color.GREEN);
+        point_series.setSize(18);
+        StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(point_graph);
+
+
+        staticLabelsFormatter.setHorizontalLabels(response.getLabelDate().toArray(new String[0]));
+
+        point_graph.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
+        point_series.setOnDataPointTapListener(new OnDataPointTapListener() {
+            @Override
+            public void onTap(Series series, DataPointInterface dataPoint) {
+                String msg = "X:" + dataPoint.getX() + "\nY:" + dataPoint.getX();
+                Toast.makeText(getActivity(), msg, Toast.LENGTH_LONG).show();
+                System.out.println("asdadas");
+
+            }
+        });
+    }
+
+    private void fetchData(String fromDate, String toDate, String friends) {
+        if (friends.isEmpty()) friends = "&quot;&quot;";
+        if (isFromDateSet && isToDateSet) {
+            StringRequest stringRequest = new StringRequest(Request.Method.GET, URL + "survey/" + USER_ID + "/" + fromDate + "/" + toDate + "/" + friends,
+                    response -> {
+                        try {
+                            SurveyResponse res = new SurveyResponse();
+                            List<Result> resultList = new ArrayList<>();
+                            List<String> labelDataList = new ArrayList<>();
+
+                            JSONObject obj = new JSONObject(response);
+                            JSONArray result = obj.getJSONArray("result");
+
+                            for (int i = 0; i < result.length(); i++) {
+                                Result r = new Result();
+                                r.setId(result.getJSONObject(i).getInt("id"));
+                                r.setNickname(result.getJSONObject(i).getString("nickname"));
+
+                                List<Integer> moodDataList = new ArrayList<>();
+                                List<Integer> relaxedDataList = new ArrayList<>();
+
+                                JSONArray moodDataJsonArray = result.getJSONObject(i).getJSONArray("mood_data");
+                                for (int j = 0; j < moodDataJsonArray.length(); j++) {
+                                    moodDataList.add(moodDataJsonArray.getInt(j) + j);
+                                }
+
+                                JSONArray relaxedDataJsonArray = result.getJSONObject(i).getJSONArray("relaxed_data");
+                                for (int j = 0; j < relaxedDataJsonArray.length(); j++) {
+                                    relaxedDataList.add(relaxedDataJsonArray.getInt(j));
+                                }
+
+                                r.setMoodData(moodDataList);
+                                r.setRelaxedData(relaxedDataList);
+                                resultList.add(r);
+                            }
+
+                            res.setResult(resultList);
+
+                            JSONArray label_date = obj.getJSONArray("label_date");
+                            for (int i = 0; i < label_date.length(); i++) {
+                                labelDataList.add(label_date.getString(i));
+                            }
+
+                            res.setLabelDate(labelDataList);
+                            responseLiveData.postValue(res);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    },
+                    error -> {
+                    });
+            RequestQueue requestQueue = Volley.newRequestQueue(getContext());
+            requestQueue.add(stringRequest);
+        }
+    }
+
+    @Override
+    public void onClick(String ids) {
+        if (isFromDateSet && isToDateSet)
+            fetchData(fromDate.getText().toString(), toDate.getText().toString(), ids);
     }
 }
