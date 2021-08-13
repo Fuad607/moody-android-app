@@ -44,29 +44,16 @@ public class HelperAdapterUserList extends RecyclerView.Adapter {
         ViewHolderClass viewHolderClass = (ViewHolderClass) viewHolder;
         viewHolderClass.textView.setText(arrayList.get(position));
 
-        viewHolderClass.itemView.setOnClickListener(v -> {
-            // Toast.makeText(context, "test", Toast.LENGTH_LONG).show();
-            ((ViewHolderClass) viewHolder).checkBox_select.setChecked(setChecked(contactedUserId.get(position)));
-            String commaseparatedlist = checkedFriends.toString();
-            commaseparatedlist
-                    = commaseparatedlist.replace("[", "")
-                    .replace("]", "")
-                    .replace(" ", "");
-            clickListener.onClick(commaseparatedlist);
-        });
-
         viewHolderClass.checkBox_select.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    // viewHolderClass.m1.setVisibility(View.VISIBLE);
-
-                    //MainActivity.q3.put(contactedUserId.get(viewHolderClass.getAdapterPosition()), "");
-                } else {
-                    // MainActivity.q3.remove(contactedUserId.get(viewHolderClass.getAdapterPosition()));
-                    // viewHolderClass.m1.setVisibility(View.INVISIBLE);
-
-                }
+                ((ViewHolderClass) viewHolder).checkBox_select.setChecked(setChecked(contactedUserId.get(position)));
+                String commaseparatedlist = checkedFriends.toString();
+                commaseparatedlist
+                        = commaseparatedlist.replace("[", "")
+                        .replace("]", "")
+                        .replace(" ", "");
+                clickListener.onClick(commaseparatedlist);
             }
         });
 
@@ -77,7 +64,7 @@ public class HelperAdapterUserList extends RecyclerView.Adapter {
         return arrayList.size();
     }
 
-    public class ViewHolderClass extends RecyclerView.ViewHolder {
+    public static class ViewHolderClass extends RecyclerView.ViewHolder {
         TextView textView;
         CheckBox checkBox_select;
 

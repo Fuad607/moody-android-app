@@ -43,8 +43,7 @@ public class SyncWorker extends Worker {
     }
 
     private void sync_data() {
-        System.out.println("sync strart");
-        DBHelper DB = new DBHelper(getApplicationContext());
+         DBHelper DB = new DBHelper(getApplicationContext());
 
         Cursor cursor_survey = DB.getSurvey();
         cursor_survey.moveToFirst();
@@ -95,12 +94,7 @@ public class SyncWorker extends Worker {
                                             new Response.Listener<String>() {
                                                 @Override
                                                 public void onResponse(String response) {
-                                                    try {
-                                                        System.out.println("special stituation saved");
-                                                        jsonArray = new JSONArray(response);
-                                                    } catch (JSONException e) {
-                                                        e.printStackTrace();
-                                                    }
+
                                                 }
                                             },
                                             new Response.ErrorListener() {
@@ -135,11 +129,7 @@ public class SyncWorker extends Worker {
                                             new Response.Listener<String>() {
                                                 @Override
                                                 public void onResponse(String response) {
-                                                    try {
-                                                        jsonArray = new JSONArray(response);
-                                                    } catch (JSONException e) {
-                                                        e.printStackTrace();
-                                                    }
+
                                                 }
                                             },
                                             new Response.ErrorListener() {

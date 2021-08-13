@@ -58,7 +58,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
+import java.util.Set;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -76,10 +80,27 @@ public class HistoryFragment extends Fragment implements RvClickListener {
     EditText searchText;
     private static String URL = "https://collectivemoodtracker.herokuapp.com/api/";
 
+    ArrayList<String> array_list_contacted_user_id = new ArrayList<String>();
+
     private boolean isFromDateSet = false;
     private boolean isToDateSet = false;
     EditText fromDate, toDate;
-    private MutableLiveData<SurveyResponse> responseLiveData = new MutableLiveData<>();
+    private final MutableLiveData<SurveyResponse> responseLiveData = new MutableLiveData<>();
+
+    private HashMap<DataPoint, Integer> moodDataMap = new HashMap<>();
+    private HashMap<DataPoint, Integer> relaxedDataMap = new HashMap<>();
+    private List<Integer> colorList = new ArrayList<>(
+            Arrays.asList(
+                    Color.GREEN,
+                    Color.BLUE,
+                    Color.RED,
+                    Color.MAGENTA,
+                    Color.YELLOW,
+                    Color.CYAN,
+                    Color.GRAY
+            )
+    );
+    private HashMap<Integer, Integer> colors = new HashMap<>();
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Nullable
@@ -88,13 +109,12 @@ public class HistoryFragment extends Fragment implements RvClickListener {
 
     public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable @org.jetbrains.annotations.Nullable ViewGroup container, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_history, container, false);
-
         sharedPreferences = this.getActivity().getSharedPreferences("USER_DATA", Context.MODE_PRIVATE);
         USER_ID = sharedPreferences.getString("USER_ID", "");
-
         return v;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @SuppressLint("SetTextI18n")
     @Override
     public void onViewCreated(@NonNull @NotNull View v, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
@@ -104,19 +124,26 @@ public class HistoryFragment extends Fragment implements RvClickListener {
         USER_ID = sharedPreferences.getString("USER_ID", "");
         DB = new DBHelper(getContext());
 
-        //if no internet
-        Cursor cursor_survey = DB.getSurvey();
-        cursor_survey.moveToFirst();
         point_graph.getViewport().setScrollable(true);
         point_graph.getViewport().setScrollableY(true);
         point_graph.getViewport().setScalable(true);
         point_graph.getViewport().setScalableY(true);
 
-        while (cursor_survey.isAfterLast() == false) {
-            cursor_survey.moveToNext();
-        }
+        LocalDate current = LocalDate.now();
+        LocalDate startdate = current.minusDays(6);
+
 
         fromDate = v.findViewById(R.id.fromDate);
+        toDate = v.findViewById(R.id.toDate);
+
+        fromDate.setText(startdate.getDayOfMonth()+"."+startdate.getMonthValue() +"."+startdate.getYear() );
+        isFromDateSet = true;
+
+        toDate.setText(current.getDayOfMonth()+"."+current.getMonthValue() +"."+current.getYear() );
+        isToDateSet=true;
+
+        fetchData(fromDate.getText().toString(), toDate.getText().toString(), "&quot;&quot;");
+
         fromDate.setOnClickListener(v1 -> {
             final Calendar cldr = Calendar.getInstance();
             int day = cldr.get(Calendar.DAY_OF_MONTH);
@@ -128,10 +155,10 @@ public class HistoryFragment extends Fragment implements RvClickListener {
                         fromDate.setText(dayOfMonth + "." + (monthOfYear + 1) + "." + year1);
                         isFromDateSet = true;
                     }, year, month, day);
+            picker.updateDate(year,month,day);
             picker.show();
         });
 
-        toDate = v.findViewById(R.id.toDate);
         toDate.setOnClickListener(v1 -> {
             final Calendar cldr = Calendar.getInstance();
             int day = cldr.get(Calendar.DAY_OF_MONTH);
@@ -144,8 +171,10 @@ public class HistoryFragment extends Fragment implements RvClickListener {
                         isToDateSet = true;
                         fetchData(fromDate.getText().toString(), toDate.getText().toString(), "&quot;&quot;");
                     }, year, month, day);
+            picker.updateDate(year,month,day);
             picker.show();
         });
+
         recyclerView = v.findViewById(R.id.user_name_history_recyclerview);
 
         sharedPreferences = this.getActivity().getSharedPreferences("USER_DATA", Context.MODE_PRIVATE);
@@ -153,7 +182,6 @@ public class HistoryFragment extends Fragment implements RvClickListener {
 
         ArrayList<String> array_list = new ArrayList<String>();
         ArrayList<String> array_list_filtered = new ArrayList<String>();
-        ArrayList<String> array_list_contacted_user_id = new ArrayList<String>();
         ArrayList<String> array_list_contacted_user_id_filtered = new ArrayList<String>();
 
         DB = new DBHelper(getContext());
@@ -173,70 +201,57 @@ public class HistoryFragment extends Fragment implements RvClickListener {
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(helperAdapter);
         responseLiveData.observe(getViewLifecycleOwner(), this::drawGraph);
-
     }
 
     private void drawGraph(SurveyResponse response) {
         point_graph.removeAllSeries();
-        //api call get all users which user have relationship
+        moodDataMap.clear();
+        relaxedDataMap.clear();
+        colors.clear();
 
-        // ----- burda arrayOfDataPoints e DataPointleri elave ele ozu,
-        // datapointin x, y i ne olmalidi onu yaz,
-        // mood data, relaxed data hansini gostermey isteyirsen onlari filterle add ele ancaq
-        List<DataPoint> arrayOfDataPoints = new ArrayList<>();
         for (int i = 0; i < response.getResult().size(); i++) {
             for (int j = 0; j < response.getResult().get(i).getMoodData().size(); j++) {
-                arrayOfDataPoints.add(new DataPoint(i, response.getResult().get(i).getMoodData().get(j)));
+                moodDataMap.put(new DataPoint(j, response.getResult().get(i).getMoodData().get(j)), response.getResult().get(i).getId());
+                relaxedDataMap.put(new DataPoint(j, response.getResult().get(i).getRelaxedData().get(j)), response.getResult().get(i).getId());
             }
         }
-        // -----
+        generateColors(array_list_contacted_user_id);
 
-        DataPoint[] arr = new DataPoint[arrayOfDataPoints.size()];
-        for (int i = 0; i < arrayOfDataPoints.size(); i++) {
-            arr[i] = arrayOfDataPoints.get(i);
-        }
-        PointsGraphSeries<DataPoint> point_series = new PointsGraphSeries<>(arr);
-
-        point_graph.addSeries(point_series);
-        // point_series.setShape(PointsGraphSeries.Shape.RECTANGLE);
-        point_series.setCustomShape(new PointsGraphSeries.CustomShape() {
-            @Override
-            public void draw(Canvas canvas, Paint paint, float x, float y, DataPointInterface dataPoint) {
-                int index = arrayOfDataPoints.indexOf(dataPoint);
-                if (index != -1) {
-                    if (index % 2 == 0) {
-                        paint.setStrokeWidth(10);
-                        paint.setStyle(Paint.Style.STROKE);
-                        canvas.drawCircle(x, y, 40, paint);
-                        canvas.drawText(String.valueOf(dataPoint.getY()), x, y, paint);
-                    } else {
-                        paint.setColor(Color.BLUE);
-                        canvas.drawLine(x, y, x + 40, y, paint);
-                        canvas.drawLine(x + 40, y, x + 40, y + 40, paint);
-                        canvas.drawLine(x + 40, y + 40, x, y + 40, paint);
-                        canvas.drawLine(x, y + 40, x, y, paint);
-                    }
-                }
-            }
-        });
-
-        point_series.setColor(Color.GREEN);
-        point_series.setSize(18);
         StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(point_graph);
-
-
         staticLabelsFormatter.setHorizontalLabels(response.getLabelDate().toArray(new String[0]));
-
         point_graph.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
-        point_series.setOnDataPointTapListener(new OnDataPointTapListener() {
-            @Override
-            public void onTap(Series series, DataPointInterface dataPoint) {
-                String msg = "X:" + dataPoint.getX() + "\nY:" + dataPoint.getX();
-                Toast.makeText(getActivity(), msg, Toast.LENGTH_LONG).show();
-                System.out.println("asdadas");
 
+        PointsGraphSeries<DataPoint> dataSeries = new PointsGraphSeries<>(listToArray(moodDataMap, relaxedDataMap));
+
+        point_graph.addSeries(dataSeries);
+        dataSeries.setCustomShape((canvas, paint, x, y, dataPoint) -> {
+            if (moodDataMap.containsKey(dataPoint)) {
+                paint.setColor(colors.get(moodDataMap.get(dataPoint)));
+                paint.setStrokeWidth(10);
+                paint.setStyle(Paint.Style.STROKE);
+                canvas.drawCircle(x, y, 30, paint);
+                //canvas.drawText(String.valueOf(dataPoint.getY()), x, y, paint);
+            } else if (relaxedDataMap.containsKey(dataPoint)) {
+                paint.setColor(colors.get(relaxedDataMap.get(dataPoint)));
+                canvas.drawLine(x, y, x + 40, y, paint);
+                canvas.drawLine(x + 40, y, x + 40, y + 40, paint);
+                canvas.drawLine(x + 40, y + 40, x, y + 40, paint);
+                canvas.drawLine(x, y + 40, x, y, paint);
             }
         });
+
+        dataSeries.setOnDataPointTapListener((series, dataPoint) -> {
+            String msg = "X:" + dataPoint.getX() + "\nY:" + dataPoint.getX();
+            Toast.makeText(getActivity(), msg, Toast.LENGTH_LONG).show();
+            System.out.println("asd");
+        });
+    }
+
+    private void generateColors(List<String> friends) {
+        colors.put(Integer.valueOf(USER_ID), colorList.get(0));
+        for (int i = 0; i < friends.size(); i++) {
+            colors.put(Integer.valueOf(friends.get(i)), colorList.get(i+1));
+        }
     }
 
     private void fetchData(String fromDate, String toDate, String friends) {
@@ -299,5 +314,14 @@ public class HistoryFragment extends Fragment implements RvClickListener {
     public void onClick(String ids) {
         if (isFromDateSet && isToDateSet)
             fetchData(fromDate.getText().toString(), toDate.getText().toString(), ids);
+    }
+
+    private DataPoint[] listToArray(HashMap<DataPoint, Integer> mood, HashMap<DataPoint, Integer> relaxed) {
+
+        Set<DataPoint> all = new HashSet<>();
+        all.addAll(mood.keySet());
+        all.addAll(relaxed.keySet());
+
+        return all.toArray(new DataPoint[all.size()]);
     }
 }

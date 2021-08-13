@@ -12,14 +12,76 @@
         android:padding="10dp"
         android:text="Help"
         android:textColor="@color/colorText"
-        android:textSize="30sp" />
+        android:textSize="35sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="90dp"
-        android:paddingLeft="20dp"
-        android:text="Help"
+        android:paddingLeft="10dp"
+        android:text="How can I enter my mood?"
         android:textColor="@color/colorText"
-        android:textSize="20sp" />
+        android:textSize="24sp" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:padding="10dp"
+        android:text="You can easily enter your mood by clicking plus button or you can click the notification."
+        android:textColor="@color/colorText"
+        android:textSize="17sp" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:paddingLeft="10dp"
+            android:text="How to clear my data?"
+            android:textColor="@color/colorText"
+            android:textSize="24sp" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:padding="10dp"
+            android:text="You can not clear your data."
+            android:textColor="@color/colorText"
+            android:textSize="17sp" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:paddingLeft="10dp"
+            android:text="How I can see my data?"
+            android:textColor="@color/colorText"
+            android:textSize="24sp" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:padding="10dp"
+            android:text="You can see your data by clicking the log button."
+            android:textColor="@color/colorText"
+            android:textSize="17sp" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:paddingLeft="10dp"
+            android:text="Further questions"
+            android:textColor="@color/colorText"
+            android:textSize="24sp" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:padding="10dp"
+            android:text="If you have any questions, you can contact fuad.shirinli@uni-konstanz.de."
+            android:textColor="@color/colorText"
+            android:textSize="17sp" />
+    </LinearLayout>
 
 </FrameLayout>

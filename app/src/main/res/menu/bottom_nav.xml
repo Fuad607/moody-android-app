@@ -8,7 +8,7 @@
     <item
         android:id="@+id/nav_log"
         android:color="@color/colorPrimaryDark2"
-        android:icon="@drawable/ic_baseline_settings_24"
+        android:icon="@drawable/ic_baseline_list_alt_24"
         android:title="Log" />
     <item
         android:id="@+id/nav_history"

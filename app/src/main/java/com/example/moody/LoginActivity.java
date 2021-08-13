@@ -61,7 +61,7 @@ public class LoginActivity extends AppCompatActivity {
         email=findViewById(R.id.email);
         password=findViewById(R.id.password);
         btn_login=findViewById(R.id.btn_login);
-        link_regist=findViewById(R.id.link_regist);
+        //link_regist=findViewById(R.id.link_regist);
 
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,13 +82,13 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        link_regist.setOnClickListener(new View.OnClickListener() {
+   /*     link_regist.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
           //change
                 startActivity(new Intent(LoginActivity.this,RegisterActivity.class));
             }
-        });
+        });*/
     }
 
     private void Login(){

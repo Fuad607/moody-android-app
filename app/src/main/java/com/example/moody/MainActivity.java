@@ -29,10 +29,18 @@ public class MainActivity extends AppCompatActivity {
     public static String q4question = "", q4answer = "";
     DBHelper DB;
     String USER_ID;
+    SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        sharedPreferences = getSharedPreferences("USER_DATA", MODE_PRIVATE);
+        USER_ID = sharedPreferences.getString("USER_ID","");
+
+        if(USER_ID.isEmpty()){
+            startActivity(new Intent(MainActivity.this,LoginActivity.class));;
+        }
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
