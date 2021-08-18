@@ -75,13 +75,10 @@ public class LogFragment extends Fragment {
             cursor_user_survey.moveToNext();
         }
 
-
         final HelperLogAdapter[] helperAdapter = {new HelperLogAdapter(getContext(),array_list_timestamp, array_list_mood, array_list_relax)};
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(helperAdapter[0]);
-
-
 
         return v;
     }

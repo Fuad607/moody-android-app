@@ -21,4 +21,6 @@
      android:background="?android:attr/windowBackground"
      app:itemTextColor="#000000"
      app:menu="@menu/bottom_nav" />
+
+
  </RelativeLayout>

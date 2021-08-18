@@ -1,5 +1,6 @@
 package com.example.moody;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -40,7 +41,7 @@ public class HelperAdapterUserList extends RecyclerView.Adapter {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull @NotNull RecyclerView.ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(@NonNull @NotNull RecyclerView.ViewHolder viewHolder, @SuppressLint("RecyclerView") int position) {
         ViewHolderClass viewHolderClass = (ViewHolderClass) viewHolder;
         viewHolderClass.textView.setText(arrayList.get(position));
 

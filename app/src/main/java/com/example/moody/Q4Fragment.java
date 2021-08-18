@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.CompoundButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -54,7 +53,6 @@ public class Q4Fragment extends Fragment {
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, items);
         dropdown.setAdapter(adapter);
-
         RadioButton pos = (RadioButton) v.findViewById(R.id.radioPositive);
         RadioButton neg = (RadioButton) v.findViewById(R.id.radioNegative);
 
@@ -67,7 +65,7 @@ public class Q4Fragment extends Fragment {
                 if (selectedItem.equals("Select an answer")) {
                     pos.setVisibility(View.INVISIBLE);
                     neg.setVisibility(View.INVISIBLE);
-                   // Toast.makeText(v.getContext(), "Select an item", Toast.LENGTH_LONG).show();
+                    //Toast.makeText(v.getContext(), "Select an item", Toast.LENGTH_LONG).show();
 
                 }else{
                     pos.setVisibility(View.VISIBLE);
@@ -76,13 +74,12 @@ public class Q4Fragment extends Fragment {
                     if (MainActivity.q4.containsKey(selectedItem)) {
                         String selectitem = MainActivity.q4.get(selectedItem);
                         if (selectitem.equals("1")) {
-                             pos.setChecked(true);
-                         } else  {
-                             neg.setChecked(true);
-                         }
+                            radioGroup.check(R.id.radioPositive);
+                        } else {
+                            radioGroup.check(R.id.radioNegative);
+                        }
                     }else{
-                        pos.setChecked(false);
-                        neg.setChecked(false);
+                        radioGroup.clearCheck();
                      }
                 }
             }
@@ -97,21 +94,24 @@ public class Q4Fragment extends Fragment {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 RadioButton checkedRadioButton = (RadioButton) group.findViewById(checkedId);
-                RadioButton rb= (RadioButton) v.findViewById(checkedId);
-
                 String  typ;
 
                 if (selectedItem.equals("Select an answer")) {
-                 } else {
-                    String selectedRbText = checkedRadioButton.getText().toString();
-                    if(selectedRbText.equals("Positive")){
-                        typ="1";
-                     }else {
-                        typ="0";
-                     }
-                    MainActivity.q4.put(selectedItem, typ);
+                } else {
+
+                    if (checkedRadioButton!=null)
+                    {
+                        String selectedRbText = checkedRadioButton.getText().toString();
+                        if(selectedRbText.equals("Positive")){
+                            typ="1";
+                        }else {
+                            typ="0";
+                        }
+                        MainActivity.q4.put(selectedItem, typ);
+                    }
+
                 }
-             }
+            }
         });
     }
 }

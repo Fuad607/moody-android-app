@@ -46,8 +46,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
@@ -75,6 +78,8 @@ public class HistoryFragment extends Fragment implements RvClickListener {
     String USER_ID;
     DatePickerDialog picker;
     RecyclerView recyclerView;
+    CheckBox checkbox_mood;
+    CheckBox checkbox_relax;
     ArrayList name;
     JSONArray jsonArray;
     EditText searchText;
@@ -120,6 +125,8 @@ public class HistoryFragment extends Fragment implements RvClickListener {
     public void onViewCreated(@NonNull @NotNull View v, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(v, savedInstanceState);
         point_graph = v.findViewById(R.id.scatterPlot);
+        checkbox_mood = v.findViewById(R.id.checkbox_select_mood);
+        checkbox_relax = v.findViewById(R.id.checkbox_select_relax);
         sharedPreferences = this.getActivity().getSharedPreferences("USER_DATA", MODE_PRIVATE);
         USER_ID = sharedPreferences.getString("USER_ID", "");
         DB = new DBHelper(getContext());
@@ -132,15 +139,14 @@ public class HistoryFragment extends Fragment implements RvClickListener {
         LocalDate current = LocalDate.now();
         LocalDate startdate = current.minusDays(6);
 
-
         fromDate = v.findViewById(R.id.fromDate);
         toDate = v.findViewById(R.id.toDate);
 
-        fromDate.setText(startdate.getDayOfMonth()+"."+startdate.getMonthValue() +"."+startdate.getYear() );
+        fromDate.setText(startdate.getDayOfMonth() + "." + startdate.getMonthValue() + "." + startdate.getYear());
         isFromDateSet = true;
 
-        toDate.setText(current.getDayOfMonth()+"."+current.getMonthValue() +"."+current.getYear() );
-        isToDateSet=true;
+        toDate.setText(current.getDayOfMonth() + "." + current.getMonthValue() + "." + current.getYear());
+        isToDateSet = true;
 
         fetchData(fromDate.getText().toString(), toDate.getText().toString(), "&quot;&quot;");
 
@@ -155,7 +161,7 @@ public class HistoryFragment extends Fragment implements RvClickListener {
                         fromDate.setText(dayOfMonth + "." + (monthOfYear + 1) + "." + year1);
                         isFromDateSet = true;
                     }, year, month, day);
-            picker.updateDate(year,month,day);
+            picker.updateDate(year, month, day);
             picker.show();
         });
 
@@ -171,11 +177,42 @@ public class HistoryFragment extends Fragment implements RvClickListener {
                         isToDateSet = true;
                         fetchData(fromDate.getText().toString(), toDate.getText().toString(), "&quot;&quot;");
                     }, year, month, day);
-            picker.updateDate(year,month,day);
+            picker.updateDate(year, month, day);
             picker.show();
         });
 
+        checkbox_mood.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                isFromDateSet = true;
+                isToDateSet = true;
+
+                fetchData(fromDate.getText().toString(), toDate.getText().toString(), "&quot;&quot;");
+            }
+        });
+        checkbox_relax.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                isFromDateSet = true;
+                isToDateSet = true;
+
+                fetchData(fromDate.getText().toString(), toDate.getText().toString(), "&quot;&quot;");
+            }
+        });
+
+
         recyclerView = v.findViewById(R.id.user_name_history_recyclerview);
+
+        Long tsLong = System.currentTimeMillis() / 1000;
+        String ts = tsLong.toString();
+        Integer date_time=Integer.valueOf(ts);
+        System.out.println(MenuActivity.experiment_end_time);
+
+        if (MenuActivity.experiment_end_time <= date_time) {
+            recyclerView.setVisibility(View.VISIBLE);
+        } else {
+            recyclerView.setVisibility(View.INVISIBLE);
+        }
 
         sharedPreferences = this.getActivity().getSharedPreferences("USER_DATA", Context.MODE_PRIVATE);
         USER_ID = sharedPreferences.getString("USER_ID", "");
@@ -200,10 +237,12 @@ public class HistoryFragment extends Fragment implements RvClickListener {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(helperAdapter);
+
         responseLiveData.observe(getViewLifecycleOwner(), this::drawGraph);
     }
 
     private void drawGraph(SurveyResponse response) {
+
         point_graph.removeAllSeries();
         moodDataMap.clear();
         relaxedDataMap.clear();
@@ -225,13 +264,13 @@ public class HistoryFragment extends Fragment implements RvClickListener {
 
         point_graph.addSeries(dataSeries);
         dataSeries.setCustomShape((canvas, paint, x, y, dataPoint) -> {
-            if (moodDataMap.containsKey(dataPoint)) {
+            if (moodDataMap.containsKey(dataPoint) && checkbox_mood.isChecked()) {
                 paint.setColor(colors.get(moodDataMap.get(dataPoint)));
                 paint.setStrokeWidth(10);
                 paint.setStyle(Paint.Style.STROKE);
-                canvas.drawCircle(x, y, 30, paint);
+                canvas.drawCircle(x, y, 25, paint);
                 //canvas.drawText(String.valueOf(dataPoint.getY()), x, y, paint);
-            } else if (relaxedDataMap.containsKey(dataPoint)) {
+            } else if (relaxedDataMap.containsKey(dataPoint) && checkbox_relax.isChecked()) {
                 paint.setColor(colors.get(relaxedDataMap.get(dataPoint)));
                 canvas.drawLine(x, y, x + 40, y, paint);
                 canvas.drawLine(x + 40, y, x + 40, y + 40, paint);
@@ -250,7 +289,7 @@ public class HistoryFragment extends Fragment implements RvClickListener {
     private void generateColors(List<String> friends) {
         colors.put(Integer.valueOf(USER_ID), colorList.get(0));
         for (int i = 0; i < friends.size(); i++) {
-            colors.put(Integer.valueOf(friends.get(i)), colorList.get(i+1));
+            colors.put(Integer.valueOf(friends.get(i)), colorList.get(i + 1));
         }
     }
 
