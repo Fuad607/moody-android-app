@@ -14,7 +14,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginTop="100dp"
         android:padding="10dp"
-        android:text="Is there currently any special situationin your life?"
+        android:text="Is there currently any special situation in your life?"
         android:textColor="@color/colorText"
         android:textSize="30sp" />
     <androidx.cardview.widget.CardView

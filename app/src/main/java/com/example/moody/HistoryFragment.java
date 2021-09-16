@@ -160,6 +160,7 @@ public class HistoryFragment extends Fragment implements RvClickListener {
                     (view, year1, monthOfYear, dayOfMonth) -> {
                         fromDate.setText(dayOfMonth + "." + (monthOfYear + 1) + "." + year1);
                         isFromDateSet = true;
+                        toDate.setText("");
                     }, year, month, day);
             picker.updateDate(year, month, day);
             picker.show();
@@ -282,8 +283,7 @@ public class HistoryFragment extends Fragment implements RvClickListener {
         dataSeries.setOnDataPointTapListener((series, dataPoint) -> {
             String msg = "X:" + dataPoint.getX() + "\nY:" + dataPoint.getX();
             Toast.makeText(getActivity(), msg, Toast.LENGTH_LONG).show();
-            System.out.println("asd");
-        });
+         });
     }
 
     private void generateColors(List<String> friends) {

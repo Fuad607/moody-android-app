@@ -29,6 +29,9 @@ public class HomeFragment extends Fragment {
 
         FloatingActionButton add_mood = (FloatingActionButton) v.findViewById(R.id.add_mood);
 
+        if(MenuActivity.show_old){
+            add_mood.hide();
+        }
         add_mood.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

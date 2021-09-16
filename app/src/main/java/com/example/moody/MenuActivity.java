@@ -40,6 +40,7 @@ import androidx.work.WorkManager;
 import com.google.android.gms.nearby.Nearby;
 import com.google.android.gms.nearby.messages.Message;
 import com.google.android.gms.nearby.messages.MessageListener;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -67,6 +68,7 @@ public class MenuActivity extends AppCompatActivity {
     JSONObject jsonObjectExperimentFuture;
     JSONObject jsonObjectExperimentOld;
     int timefrequency=5;
+    public static boolean show_old=false;
     public static  Integer worker_range=1;
     public static  Integer experiment_end_time=0;
     public static  Long future_experiment_start_time;
@@ -121,7 +123,6 @@ public class MenuActivity extends AppCompatActivity {
                             else if(jsonObjectExperimentFuture.length()!=0){
                                 bottom_nav.setVisibility(View.INVISIBLE);
                                 future_experiment_start_time = Long.parseLong(jsonObjectExperimentFuture.getString("start_timestamp"));
-                                System.out.println(future_experiment_start_time);
                                 Calendar cal = Calendar.getInstance(Locale.ENGLISH);
                                 cal.setTimeInMillis(future_experiment_start_time * 1000);
                                 String experiment_start_time = DateFormat.format("dd-MM-yyyy", cal).toString();
@@ -152,21 +153,26 @@ public class MenuActivity extends AppCompatActivity {
 
                                 System.out.println(experiment_start_time);
                             }
+
                             else if(jsonObjectExperimentOld.length()!=0){
                                  getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new HomeFragment()).commit();
                                  bottom_nav.setVisibility(View.VISIBLE);
                                  experiment_end_time = Integer.parseInt(jsonObjectExperimentOld.getString("end_timestamp"));
 
-                                new AlertDialog.Builder(MenuActivity.this)
-                                        .setTitle("Please be patient")
-                                        .setMessage("The experiment is finished you can see other users data!")
-                                        .setCancelable(false)
-                                        .setPositiveButton("ok", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                WorkManager.getInstance().cancelAllWork();
-                                            }
-                                        }).show();
+                                 if(!show_old){
+                                     new AlertDialog.Builder(MenuActivity.this)
+                                             .setTitle("Please be patient")
+                                             .setMessage("The experiment is finished you can see other users data!")
+                                             .setCancelable(false)
+                                             .setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                                                 @Override
+                                                 public void onClick(DialogInterface dialog, int which) {
+                                                     WorkManager.getInstance().cancelAllWork();
+                                                 }
+                                             }).show();
+                                     show_old=true;
+                                 }
+
 
                             }   else if(jsonObjectExperimentFuture.length()==0 && jsonObjectExperimentCurrent.length()==0 && jsonObjectExperimentOld.length()==0){
 
@@ -212,7 +218,7 @@ public class MenuActivity extends AppCompatActivity {
         requestMeeting.add(stringExperiment);
 
         final PeriodicWorkRequest periodicSyncRequest
-                = new PeriodicWorkRequest.Builder(SyncWorker.class, 15, TimeUnit.MINUTES)
+                = new PeriodicWorkRequest.Builder(SyncWorker.class, 10, TimeUnit.HOURS)
                 .build();
         WorkManager.getInstance().enqueue(periodicSyncRequest);
         WorkManager.getInstance().enqueueUniquePeriodicWork(
