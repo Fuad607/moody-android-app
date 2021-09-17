@@ -214,7 +214,6 @@ public class MenuActivity extends AppCompatActivity {
                     }
                 });
 
-
         RequestQueue requestMeeting= Volley.newRequestQueue(getApplicationContext());
         requestMeeting.add(stringExperiment);
 
